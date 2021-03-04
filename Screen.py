@@ -11,8 +11,6 @@ from CustomExceptions import UserDoesNotExistsError, PrintingQuestionError
 from PyInquirer import prompt
 import cutie
 
-import tkinter
-
 
 class Screen:
     """This is a super class for other subscales for different screens"""
