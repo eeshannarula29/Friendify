@@ -1,6 +1,6 @@
 from typing import Optional
 
-from CustomExceptions import DataDidNotLoadError, RegistrationError, UserDoesNotExistsError,\
+from CustomExceptions import DataDidNotLoadError, RegistrationError, UserDoesNotExistsError, \
     UserExitsError, DataDidNotUploadError
 
 
@@ -76,7 +76,7 @@ class DataHandler:
 
         if not user:  # if userid in use not used before
             if not userData:
-                userData = {'userID': userID}
+                userData = {'userID': userID, 'friends': []}
             try:
                 database.collection(from_collection).document(userID).set(userData)
             except Exception:
@@ -93,8 +93,28 @@ class DataHandler:
         :param userID: The user ID of the person
         :param userData: the data of the user
         """
-        if DataHandler.is_user(database, userID):
+        if DataHandler.is_user(database, from_collection, userID):
             try:
                 database.collection(from_collection).document(userID).set(userData, merge=True)
             except Exception:
                 raise DataDidNotUploadError
+
+    @staticmethod
+    def add_friend(database, collection: str, of: str, to: str) -> None:
+        """ Add friend to a user
+
+        :param database: the firebase database
+        :param collection: collection in database containing data
+        :param of: the user who is adding friend
+        :param to: the user who is added friend
+        """
+        of_data = DataHandler.load_by_userID(database, collection, of)
+        to_data = DataHandler.load_by_userID(database, collection, to)
+
+        if not (to in of_data['friends'] or of in to_data['friends']):
+
+            of_data['friends'].append(to)
+            to_data['friends'].append(of)
+
+            DataHandler.update_data_by_ID(database, collection, of, of_data)
+            DataHandler.update_data_by_ID(database, collection, to, to_data)

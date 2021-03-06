@@ -1,3 +1,5 @@
+import pyfiglet
+
 collectionName: str = "data"
 keysFile: str = "keys.json"
 aboutUs: str = "AboutUs.txt"
@@ -123,6 +125,14 @@ Questions = {
         }
     ],
 
+    'add_friend_question': [
+        {
+            'type': 'confirm',
+            'name': 'add_friend',
+            'message': 'Do you want to add this user as your friend',
+        }
+    ],
+
     'movie_question': '🍿 select at most 3 movies that you like',
 
     'music_question': '🎷 select at most 3 music categories that you like',
@@ -139,7 +149,9 @@ Messages = {
     'username_taken': "⛔️ The username has already been take",
     'registered_message': "Congratulations 🎉 you registered your self, now sign in with your "
                           "user id to find some friends 👯‍ ",
-    'username_nonexistent': '⛔️ The username you entered is not registered'
+    'username_nonexistent': '⛔️ The username you entered is not registered',
+    'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
+                'profile 👨‍💼 or exit 🚪 '
 }
 
 logo = """
@@ -184,4 +196,23 @@ def profile(data) -> str:
         string_so_far += 'Favourite food categories: ' + ', '.join(data['food']) + '\n \n'
     if 'games' in data:
         string_so_far += 'Favourite games: ' + ', '.join(data['games']) + '\n \n'
+    if 'friends'in data:
+        string_so_far += 'Friends: \n' + '\n'.join(data['friends'])
+
     return string_so_far
+
+
+def generate_question_with_choices(choices: list[str], message: str):
+    return [
+        {
+            'type': 'list',
+            'name': 'options',
+            'message': message,
+            'choices': choices
+        }
+    ]
+
+
+def printLogo() -> None:
+    custom_fig = pyfiglet.figlet_format('Friendify 👯‍')
+    print(custom_fig)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import Constants
 
 import os
-from typing import Optional
+from typing import Optional, Any
 from DataHandler import DataHandler
 
 from CustomExceptions import UserDoesNotExistsError, PrintingQuestionError
@@ -83,9 +83,10 @@ class HomeScreen(Screen):
     def show(self, clear_screen_before_present: bool = True) -> Optional[Screen]:
         Screen.clear_screen() if clear_screen_before_present else False
 
-        print(Constants.logo)
+        Constants.printLogo()
 
-        answer = Screen.ask_question_PyInquirer(Constants.Questions['main_questions'])['options']
+        answer = Screen.ask_question_PyInquirer(Constants.Questions['main_questions']). \
+            get('options', 'stay')
 
         if answer == 'About Us':
             return DocumentationScreen(self.database, Constants.aboutUs, previous_screen=self,
@@ -94,6 +95,9 @@ class HomeScreen(Screen):
         elif answer == 'Sign-in/Register':
             return SignInUp(self.database, previous_screen=self, userID=self.logged_in_as)
 
+        elif answer == 'stay':
+            return self
+
         else:
             return None
 
@@ -101,17 +105,19 @@ class HomeScreen(Screen):
 class DocumentationScreen(Screen):
 
     def __init__(self, db, document_path_or_string: str, is_path: Optional[bool] = True,
-                 previous_screen: Optional[Screen] = None, userID: Optional[str] = None) -> None:
+                 previous_screen: Optional[Screen] = None, userID: Optional[str] = None,
+                 custom_questions: list[(list[dir], Any)] = None) -> None:
 
         super().__init__(db, previous_screen=previous_screen, userID=userID)
         self.document_path_or_string = document_path_or_string
         self.is_path = is_path
+        self.custom_questions = custom_questions
 
     def show(self, clear_screen_before_present: bool = True) -> Screen:
 
         Screen.clear_screen() if clear_screen_before_present else False
 
-        print(Constants.logo)
+        Constants.printLogo()
 
         if self.is_path:
             try:
@@ -122,9 +128,18 @@ class DocumentationScreen(Screen):
         else:
             print(self.document_path_or_string)
 
-        Screen.ask_question_PyInquirer(Constants.Questions['exit_question'])
+        if self.custom_questions:
+            for question in self.custom_questions:
+                answer = Screen.ask_question_PyInquirer(question[0])
 
-        return self.previous_screen
+                result = question[1](answer.get(question[2], 'quit'))
+
+                if isinstance(result, Screen):
+                    return result
+        else:
+            Screen.ask_question_PyInquirer(Constants.Questions['exit_question'])
+
+            return self.previous_screen
 
 
 class SignInUp(Screen):
@@ -133,16 +148,19 @@ class SignInUp(Screen):
 
         Screen.clear_screen() if clear_screen_before_present else False
 
-        print(Constants.logo)
+        Constants.printLogo()
 
         Screen.print_space(1)
 
-        answer = Screen.ask_question_PyInquirer(Constants.Questions['log_questions'])['options']
+        answer = Screen.ask_question_PyInquirer(Constants.Questions['log_questions']). \
+            get('options', 'stay')
 
         if answer == 'Register':
             return Register(self.database, previous_screen=self, userID=self.logged_in_as)
         elif answer == 'Sign in':
             return SignIn(self.database, self, self.logged_in_as)
+        elif answer == 'stay':
+            return self
         else:
             return self.previous_screen
 
@@ -152,7 +170,7 @@ class Register(Screen):
     def show(self, clear_screen_before_present: bool = True) -> Screen:
         show_logo = Screen.clear_screen() if clear_screen_before_present else False
 
-        print(Constants.logo) if show_logo else False
+        Constants.printLogo() if show_logo else False
 
         self.logged_in_as = Screen.ask_question_PyInquirer(Constants.Questions['UserID_question'])[
             'userID']
@@ -165,6 +183,7 @@ class Register(Screen):
                                                          Constants.ProfileQuestions)
 
         answers['userID'] = self.logged_in_as
+        answers['friends'] = []
 
         DataHandler.register(self.database, Constants.collectionName, self.logged_in_as, answers)
 
@@ -176,10 +195,10 @@ class SignIn(Screen):
     def show(self, clear_screen_before_present: bool = True) -> Screen:
         show_logo = Screen.clear_screen() if clear_screen_before_present else False
 
-        print(Constants.logo) if show_logo else False
+        Constants.printLogo() if show_logo else False
 
         self.logged_in_as = \
-            Screen.ask_question_PyInquirer(Constants.Questions['sign_in_questions'])['userID']
+            Screen.ask_question_PyInquirer(Constants.Questions['sign_in_questions']).get('userID')
 
         while not DataHandler.is_user(self.database, Constants.collectionName, self.logged_in_as):
             print(Constants.Messages['username_nonexistent'])
@@ -194,20 +213,26 @@ class SignedIn(Screen):
 
         Screen.clear_screen() if clear_screen_before_present else False
 
-        print(Constants.logo)
+        Constants.printLogo()
         Screen.print_space(1)
         print(f'Home Screen 🏡 ({self.logged_in_as})')
         Screen.print_space(1)
 
-        answer = Screen.ask_question_PyInquirer(Constants.Questions['after_sign_in_questions'])[
-            'options']
+        answer = Screen.ask_question_PyInquirer(Constants.Questions['after_sign_in_questions']).get(
+            'options', 'stay')
 
         if answer == 'see friend recommendations':
-            # TODO: implement this condition
-            return self
+
+            return Recommendations(self.database, self, self.logged_in_as)
 
         elif answer == 'change your preferences':
-            # TODO: implement this condition
+
+            answers = Screen.ask_multi_choice_question_cutie(Constants.Messages['header_message'],
+                                                             Constants.ProfileQuestions)
+
+            DataHandler.update_data_by_ID(self.database, Constants.collectionName,
+                                          self.logged_in_as, answers)
+
             return self
 
         elif answer == 'your profile':
@@ -219,5 +244,50 @@ class SignedIn(Screen):
                                        previous_screen=self,
                                        userID=self.logged_in_as)
 
-        else:
+        elif answer == 'Logout':
             return self.previous_screen
+
+        elif answer == 'stay':
+            return self
+
+
+class Recommendations(Screen):
+
+    def show(self, clear_screen_before_present: bool = True) -> Screen:
+
+        Screen.clear_screen() if clear_screen_before_present else False
+
+        Constants.printLogo()
+
+        # these would be taken from decision tree
+        # for now we are taking all the users
+        recommendations = [user['userID'] for user in
+                           DataHandler.load_all(self.database, Constants.collectionName)
+                           if user['userID'] != self.logged_in_as]
+
+        recommendations.extend(['Exit'])
+
+        question = Constants.generate_question_with_choices(recommendations,
+                                                            Constants.Messages['profiles'])
+
+        answer = Screen.ask_question_PyInquirer(question)['options']
+
+        if answer == 'Exit':
+            return self.previous_screen
+
+        else:
+            user_data = DataHandler.load_by_userID(self.database, Constants.collectionName, answer)
+
+            questions = [
+
+                (Constants.Questions['add_friend_question'],
+                 lambda ans: DataHandler.add_friend(self.database, Constants.collectionName,
+                                                    of=self.logged_in_as, to=answer)
+                 if ans else None, 'add_friend'),
+
+                (Constants.Questions['exit_question'], lambda _: self, 'quit')
+            ]
+
+            return DocumentationScreen(self.database, Constants.profile(user_data), is_path=False,
+                                       previous_screen=self, userID=self.logged_in_as,
+                                       custom_questions=questions)
