@@ -250,6 +250,29 @@ class SignedIn(Screen):
         elif answer == 'stay':
             return self
 
+        elif answer == 'Edit friends':
+
+            friends = DataHandler.load_by_userID(self.database, Constants.collectionName,
+                                                 self.logged_in_as).get('friends')
+
+            choices = [{'name': friend} for friend in friends]
+
+            questions = Constants.generate_question_multiple_choice(choices,
+                                                                    Constants.Messages[
+                                                                        'choose_friends'])
+
+            if friends == []:
+                return DocumentationScreen(self.database, Constants.Messages['no_friends'],
+                                           is_path=False, previous_screen=self)
+
+            un_friend_list = Screen.ask_question_PyInquirer(questions).get('options', [])
+
+            for friend in un_friend_list:
+                DataHandler.un_friend(self.database, Constants.collectionName,
+                                      by=self.logged_in_as, to=friend)
+
+            return self
+
 
 class Recommendations(Screen):
 

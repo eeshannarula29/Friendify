@@ -118,3 +118,23 @@ class DataHandler:
 
             DataHandler.update_data_by_ID(database, collection, of, of_data)
             DataHandler.update_data_by_ID(database, collection, to, to_data)
+
+    @staticmethod
+    def un_friend(database, collection, by: str, to: str) -> None:
+        """remove friend
+
+        :param database: the firebase database
+        :param collection: collection in database containing data
+        :param by: Id of the user who is un friending
+        :param to: Id of the user who is getting un friended
+        """
+        by_data = DataHandler.load_by_userID(database, collection, by)
+        to_data = DataHandler.load_by_userID(database, collection, to)
+
+        if to in by_data['friends'] and by in to_data['friends']:
+
+            by_data['friends'].remove(to)
+            to_data['friends'].remove(by)
+
+        DataHandler.update_data_by_ID(database, collection, by, by_data)
+        DataHandler.update_data_by_ID(database, collection, to, to_data)

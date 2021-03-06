@@ -102,8 +102,8 @@ Questions = {
             'type': 'list',
             'name': 'options',
             'message': 'What will you like to do',
-            'choices': ['see friend recommendations', 'change your preferences', 'your profile',
-                        'Logout']
+            'choices': ['see friend recommendations', 'change your preferences', 'Edit friends',
+                        'your profile', 'Logout']
         }
     ],
 
@@ -151,7 +151,9 @@ Messages = {
                           "user id to find some friends 👯‍ ",
     'username_nonexistent': '⛔️ The username you entered is not registered',
     'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
-                'profile 👨‍💼 or exit 🚪 '
+                'profile 👨‍💼 or exit 🚪 ',
+    'choose_friends': '🙅 select the people you want to un-friend 🙅',
+    'no_friends': 'You have no friends 😞, click enter to Exit'
 }
 
 logo = """
@@ -196,7 +198,7 @@ def profile(data) -> str:
         string_so_far += 'Favourite food categories: ' + ', '.join(data['food']) + '\n \n'
     if 'games' in data:
         string_so_far += 'Favourite games: ' + ', '.join(data['games']) + '\n \n'
-    if 'friends'in data:
+    if 'friends' in data:
         string_so_far += 'Friends: \n' + '\n'.join(data['friends'])
 
     return string_so_far
@@ -206,6 +208,17 @@ def generate_question_with_choices(choices: list[str], message: str):
     return [
         {
             'type': 'list',
+            'name': 'options',
+            'message': message,
+            'choices': choices
+        }
+    ]
+
+
+def generate_question_multiple_choice(choices: list[dict], message: str):
+    return [
+        {
+            'type': 'checkbox',
             'name': 'options',
             'message': message,
             'choices': choices
