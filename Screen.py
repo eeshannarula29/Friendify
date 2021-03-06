@@ -176,8 +176,18 @@ class Register(Screen):
             'userID']
 
         while DataHandler.is_user(self.database, Constants.collectionName, self.logged_in_as):
+
             print(Constants.Messages['username_taken'])
-            self.show(clear_screen_before_present=False)
+
+            question = Constants.generate_question_with_choices(['Try again', 'Exit'],
+                                                                "Do you want to:")
+
+            answer = Screen.ask_question_PyInquirer(question).get('options')
+
+            if answer == 'Try again':
+                self.show(clear_screen_before_present=False)
+            else:
+                return self.previous_screen
 
         answers = Screen.ask_multi_choice_question_cutie(Constants.Messages['header_message'],
                                                          Constants.ProfileQuestions)
@@ -201,8 +211,18 @@ class SignIn(Screen):
             Screen.ask_question_PyInquirer(Constants.Questions['sign_in_questions']).get('userID')
 
         while not DataHandler.is_user(self.database, Constants.collectionName, self.logged_in_as):
+
             print(Constants.Messages['username_nonexistent'])
-            self.show(clear_screen_before_present=False)
+
+            question = Constants.generate_question_with_choices(['Try again', 'Exit'],
+                                                                "Do you want to:")
+
+            answer = Screen.ask_question_PyInquirer(question).get('options')
+
+            if answer == 'Try again':
+                self.show(clear_screen_before_present=False)
+            else:
+                return self.previous_screen
 
         return SignedIn(self.database, self.previous_screen, self.logged_in_as)
 
