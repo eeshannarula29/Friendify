@@ -74,6 +74,8 @@ Finally, you have entered you home screen. Now you can make new friends 🎉 Yey
 
 - To view your profile you have to go to the "your profile" option which has all the information about you, including your preferences and friend list.
 
+- "Delete account" option deletes your account, need not worry, its asks for conformation. 
+  
 - finally, you can logout to register sign in screen by selecting "Logout"
 
 
