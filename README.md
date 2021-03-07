@@ -70,7 +70,7 @@ Finally, you have entered you home screen. Now you can make new friends 🎉 Yey
 
 - The "change your preferences" option is for changing the answers to the questions you were asked while registrations. These are used to give you your friend recommendations.
 
-- If you want to Un friend people, you can go the "Edit profile" option, where you can select multiple people at once, who you want to unfriend. 
+- If you want to Un friend people, you can go the "Edit friends" option, where you can select multiple people at once, who you want to unfriend. 
 
 - To view your profile you have to go to the "your profile" option which has all the information about you, including your preferences and friend list.
 
