@@ -1,6 +1,6 @@
 # Friendify
 
-## About US
+## About Us
 
 Friendify is an app used to make friends in these hard times when
 it is so difficult to do so. Friendify takes into note the interests
