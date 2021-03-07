@@ -6,6 +6,8 @@ aboutUs: str = "AboutUs.txt"
 
 QuestionsLimit: int = 3
 
+thankyou_message = "Thank you for using Friendify 🙏 😀"
+
 Categories = {
 
     'movies': [
@@ -103,7 +105,7 @@ Questions = {
             'name': 'options',
             'message': 'What will you like to do',
             'choices': ['see friend recommendations', 'change your preferences', 'Edit friends',
-                        'your profile', 'Logout']
+                        'your profile', 'Delete account', 'Logout']
         }
     ],
 
@@ -130,6 +132,14 @@ Questions = {
             'type': 'confirm',
             'name': 'add_friend',
             'message': 'Do you want to add this user as your friend',
+        }
+    ],
+
+    'are_you_sure': [
+        {
+            'type': 'confirm',
+            'name': 'answer',
+            'message': 'Are you sure you want to delete your account',
         }
     ],
 

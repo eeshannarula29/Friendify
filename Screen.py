@@ -293,6 +293,22 @@ class SignedIn(Screen):
 
             return self
 
+        elif answer == 'Delete account':
+
+            confirmation = Screen.ask_question_PyInquirer(Constants.Questions['are_you_sure']).\
+                get('answer')
+
+            if confirmation:
+
+                DataHandler.delete_user(self.database, Constants.collectionName, self.logged_in_as)
+
+                return DocumentationScreen(self.database, Constants.thankyou_message, is_path=False,
+                                           previous_screen=self.previous_screen)
+
+            else:
+                print('nothing happens')
+                return self
+
 
 class Recommendations(Screen):
 

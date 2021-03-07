@@ -3,6 +3,8 @@ from typing import Optional
 from CustomExceptions import DataDidNotLoadError, RegistrationError, UserDoesNotExistsError, \
     UserExitsError, DataDidNotUploadError
 
+from firebase_admin import exceptions
+
 
 class DataHandler:
 
@@ -23,7 +25,7 @@ class DataHandler:
                 if entry.exists:
                     data.append(entry.to_dict())
 
-        except Exception:
+        except exceptions.FirebaseError:
             raise DataDidNotLoadError
 
         return data
@@ -37,13 +39,16 @@ class DataHandler:
         :param from_collection: collection from which we want to extract the data
         :return: dictionary containing the users data
         """
-        data = DataHandler.load_all(database, from_collection)
+        try:
+            user = database.collection(from_collection).document(userID).get()
 
-        if data:
-            for user in data:
-                if user['userID'] == userID:
-                    return user
-            raise UserDoesNotExistsError
+            if user.exists:
+                return user.to_dict()
+            else:
+                raise UserDoesNotExistsError
+
+        except exceptions.FirebaseError:
+            raise DataDidNotLoadError
 
     @staticmethod
     def is_user(database, from_collection: str, userID: str) -> bool:
@@ -79,7 +84,7 @@ class DataHandler:
                 userData = {'userID': userID, 'friends': []}
             try:
                 database.collection(from_collection).document(userID).set(userData)
-            except Exception:
+            except (ValueError, TypeError, exceptions.FirebaseError):
                 raise RegistrationError
         else:
             raise UserExitsError
@@ -96,7 +101,7 @@ class DataHandler:
         if DataHandler.is_user(database, from_collection, userID):
             try:
                 database.collection(from_collection).document(userID).set(userData, merge=True)
-            except Exception:
+            except (ValueError, TypeError, exceptions.FirebaseError):
                 raise DataDidNotUploadError
 
     @staticmethod
@@ -112,7 +117,6 @@ class DataHandler:
         to_data = DataHandler.load_by_userID(database, collection, to)
 
         if not (to in of_data['friends'] or of in to_data['friends']):
-
             of_data['friends'].append(to)
             to_data['friends'].append(of)
 
@@ -132,9 +136,23 @@ class DataHandler:
         to_data = DataHandler.load_by_userID(database, collection, to)
 
         if to in by_data['friends'] and by in to_data['friends']:
-
             by_data['friends'].remove(to)
             to_data['friends'].remove(by)
 
         DataHandler.update_data_by_ID(database, collection, by, by_data)
         DataHandler.update_data_by_ID(database, collection, to, to_data)
+
+    @staticmethod
+    def delete_user(database, from_collection: str, userID: str) -> None:
+        """ Delete the user account
+
+        :param database: the firebase database
+        :param from_collection: collection in database containing data
+        :param userID: Id of the user who is deleting the account
+        """
+        user_data = DataHandler.load_by_userID(database, from_collection, userID)
+
+        for friend in user_data['friends']:
+            DataHandler.un_friend(database, from_collection, by=userID, to=friend)
+
+        database.collection(from_collection).document(userID).delete()
