@@ -65,18 +65,54 @@ For signing up you would just have to fill in your username with which you regis
 Finally, you have entered you home screen. Now you can make new friends 🎉 Yeye !
 
 ![alt text](https://github.com/eeshannarula29/assets/blob/main/signed_in.png?raw=true)
-
-- if you click on "See friend recommendations" you will get redirected to a screen where you can see the top recommendation for you. You can select anyone of them to see their profiles and add them as your friends.
-
-- The "change your preferences" option is for changing the answers to the questions you were asked while registrations. These are used to give you your friend recommendations.
-
-- If you want to Un friend people, you can go the "Edit friends" option, where you can select multiple people at once, who you want to unfriend. 
-
-- To view your profile you have to go to the "your profile" option which has all the information about you, including your preferences and friend list.
-
-- "Delete account" option deletes your account, need not worry, its asks for conformation. 
-  
-- finally, you can logout to register sign in screen by selecting "Logout"
+#### See friend recommendations
+if you click on "See friend recommendations" you will get redirected to a screen where you can see the top recommendation for you. You can select anyone of them to see their profiles and add them as your friends.
+#### change your preferences
+The "change your preferences" option is for changing the answers to the questions you were asked while registrations. These are used to give you your friend recommendations.
+#### Unfriend people
+If you want to Un friend people, you can go the "Edit friends" option, where you can select multiple people at once, who you want to unfriend. 
+#### View profile
+To view your profile you have to go to the "your profile" option which has all the information about you, including your preferences and friend list.
+#### Delete account
+"Delete account" option deletes your account, need not worry, its asks for conformation. 
+#### Logout
+finally, you can logout to register sign in screen by selecting "Logout"
 
 
 Further Documentation Coming Soon ...
+
+## Working of the App ⚙️
+
+![alt text](https://github.com/eeshannarula29/assets/blob/main/working.jpeg?raw=true)
+
+Our app has four components, the IO and visualization libraries, Screen, Data handler and firebase database. 
+All of them work in sync, to make the app work. 
+
+### Data Flow
+ - For getting data, signing in and registering, the Screen first sends a request to the IO libraries to return the information of the data which needs to be loaded from the Firebase database. </br>
+
+
+- Then the libraries return the data to be retrieved, which the Screen requests the Data handler to retrieve. </br>
+
+
+- The Data handler then sends a request to the firebase and in turn firebase returns the data to the Data handler. </br>
+
+
+- The data handler then sends this data to our Screen which take an action accordingly. 
+
+### Friend Recommendations
+...
+### Network Visualization
+...
+
+## Documentation of libraries used 📚
+
+- [Firebase](https://firebase.google.com/docs/reference/admin/python/firebase_admin) 
+
+- [PyInquirer](https://github.com/CITGuru/PyInquirer)
+
+- [Cutie](https://pypi.org/project/cutie/)
+
+- [Pyfiglet](https://www.geeksforgeeks.org/python-ascii-art-using-pyfiglet-module/)
+
+- [Plotly](https://plotly.com/python/network-graphs/)
