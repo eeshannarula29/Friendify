@@ -52,10 +52,19 @@ For signing up you would just have to fill in your username with which you regis
 
 ### Home Screen 🏡
 
-Finally, you have entered you home screen. 
+Finally, you have entered you home screen. Now you can make new friends 🎉 Yeye !
 
 ![alt text](https://github.com/eeshannarula29/assets/blob/main/signed_in.png?raw=true)
 
-Now you can make new friends 🎉 Yeye !
+- if you click on "See friend recommendations" you will get redirected to a screen where you can see the top recommendation for you. You can select anyone of them to see their profiles and add them as your friends.
+
+- The "change your preferences" option is for changing the answers to the questions you were asked while registrations. These are used to give you your friend recommendations.
+
+- If you want to Un friend people, you can go the "Edit profile" option, where you can select multiple people at once, who you want to unfriend. 
+
+- To view your profile you have to go to the "your profile" option which has all the information about you, including your preferences and friend list.
+
+- finally, you can logout to register sign in screen by selecting "Logout"
+
 
 Further Documentation Coming Soon ...
