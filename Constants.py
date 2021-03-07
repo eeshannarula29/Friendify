@@ -6,6 +6,8 @@ aboutUs: str = "AboutUs.txt"
 
 QuestionsLimit: int = 3
 
+DataFile = 'data/Survey.csv'
+
 thankyou_message = "Thank you for using Friendify 🙏 😀"
 
 Categories = {

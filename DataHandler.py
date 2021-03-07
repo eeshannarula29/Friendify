@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 from typing import Optional
 
 from CustomExceptions import DataDidNotLoadError, RegistrationError, UserDoesNotExistsError, \
     UserExitsError, DataDidNotUploadError
 
 from firebase_admin import exceptions
+
+import csv
 
 
 class DataHandler:
@@ -156,3 +160,81 @@ class DataHandler:
             DataHandler.un_friend(database, from_collection, by=userID, to=friend)
 
         database.collection(from_collection).document(userID).delete()
+
+    @staticmethod
+    def extract_data_from_csv(filepath: str) -> list[dict]:
+        """ Extract and format user data for registration in firebase database
+
+        :param filepath: name of the file containing the data
+        :return: formatted data valid for firebase
+        """
+        try:
+            with open(filepath) as file:
+                reader = csv.reader(file)
+
+                data = []
+
+                next(reader)
+
+                for row in reader:
+                    row.pop(2)
+                    row.pop(0)
+                    data.append(DataHandler.format_row(row))
+
+                return data
+
+        except FileNotFoundError:
+            print('File does not exist')
+
+    @staticmethod
+    def format_row(row: list) -> dict:
+        """ Format a row of the csv file, from extract_data_from_csv function
+
+        :param row:
+        :return:
+        """
+
+        return {
+            'userID': row[0].split('@')[0],
+            'friends': [],
+
+            'movies': row[1].split(';'),
+            'music': row[2].split(';'),
+            'games': row[3].split(';'),
+            'food': row[4].split(';')
+        }
+
+    @staticmethod
+    def add_users_from_csv(database, from_collection: str, filename: str) -> None:
+        """register all the users in the csv file to our app
+
+        :param database: the firebase database
+        :param from_collection: collection in database containing data
+        :param filename: name of the file containing the data
+        """
+
+        data = DataHandler.extract_data_from_csv(filename)
+
+        for user in data:
+
+            try:
+                DataHandler.register(database, from_collection, user['userID'], user)
+            except UserExitsError:
+                continue
+
+# The code below is used to register all the people from the survey we conducted:
+# This code is not meant to be run
+
+# if __name__ == '__main__':
+#     import firebase_admin
+#     from firebase_admin import credentials
+#     from firebase_admin import firestore
+#
+#     import Constants
+#
+#     cred = credentials.Certificate(Constants.keysFile)
+#     firebase_admin.initialize_app(cred)
+#
+#     db = firestore.client()
+#
+#     DataHandler.add_users_from_csv(db, Constants.collectionName, Constants.DataFile)
