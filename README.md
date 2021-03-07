@@ -50,7 +50,7 @@ From here you can go onto signing in or registering. If you press exit you will 
 
 ### Register 
 
-If you go to registration, you would be asked for a new username. After your username you would have to answer some questions about your interests, which would be used to match you up with your new friends 👯‍. This is how it looks
+If you go to registration, you would be asked for a new username. After your username you would have to answer some questions about your interests, which would be used to match you up with your new friends 👯‍. This is how it looks (its a gif, if it does not start click on it)
 
 ![alt text](https://github.com/eeshannarula29/assets/blob/main/register.gif?raw=true)
 
