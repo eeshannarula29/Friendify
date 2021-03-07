@@ -22,7 +22,17 @@ friendship is a edge between them.
 We are using PyInquirer and cutie to get inputs from the terminal, which is
 used to navigate through the app.
 
+## Running The App 📱
+
+After cloning the project or downloading it you just have to run this command 
+```shell
+$ Python3 main.py
+```
+
+⚠️ Before running the app, you should full screen your console. And this app does not run on pycharm's console so you have to use your systems console. 
+
 ## Usage
+
 
 ### Welcome Screen 🙏
 
