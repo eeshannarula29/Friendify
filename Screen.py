@@ -11,6 +11,8 @@ from CustomExceptions import UserDoesNotExistsError, PrintingQuestionError
 from PyInquirer import prompt
 import cutie
 
+from RecommendationTree import RecommendationTree
+
 
 class Screen:
     """This is a super class for other subscales for different screens"""
@@ -318,21 +320,21 @@ class Recommendations(Screen):
 
         Constants.printLogo()
 
-        # these would be taken from decision tree
-        # for now we are taking all the users
-        recommendations = [user['userID'] for user in
-                           DataHandler.load_all(self.database, Constants.collectionName)
-                           if user['userID'] != self.logged_in_as]
+        recommendations = RecommendationTree.get_recommendations_for(self.database,
+                                                                     self.logged_in_as)
 
         recommendations.extend(['Exit'])
 
         question = Constants.generate_question_with_choices(recommendations,
                                                             Constants.Messages['profiles'])
 
-        answer = Screen.ask_question_PyInquirer(question)['options']
+        answer = Screen.ask_question_PyInquirer(question).get('options', 'stay')
 
         if answer == 'Exit':
             return self.previous_screen
+
+        elif answer == 'stay':
+            return self
 
         else:
             user_data = DataHandler.load_by_userID(self.database, Constants.collectionName, answer)
