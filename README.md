@@ -27,12 +27,12 @@ Cloning the project:
 ```shell
 $ git clone https://github.com/eeshannarula29/Friendify.git
 ```
-After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory. 
+After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory, in your computer command-line interpreter (cmd/terminal)
 ```shell
 $ Python3 main.py
 ```
 
-⚠️ Before running the app, you should full screen your console, and this app does not run on Pycharm's console so you have to use your systems console. 
+⚠️ Before running the app, you should full screen your console, and this app does not run on Pycharm's console so you have to use your system's command-line interpreter. 
 
 ## Usage
 
@@ -70,19 +70,32 @@ Finally, you have entered you home screen. Now you can make new friends 🎉 Yey
 ![alt text](https://github.com/eeshannarula29/assets/blob/main/signed_in.png?raw=true)
 #### See friend recommendations
 if you click on "See friend recommendations" you will get redirected to a screen where you can see the top recommendation for you. You can select anyone of them to see their profiles and add them as your friends.
+
+
+#### View your network
+...
+
+
 #### change your preferences
 The "change your preferences" option is for changing the answers to the questions you were asked while registrations. These are used to give you your friend recommendations.
+
+
 #### Unfriend people
 If you want to Un friend people, you can go the "Edit friends" option, where you can select multiple people at once, who you want to unfriend. 
+
+
 #### View profile
 To view your profile you have to go to the "your profile" option which has all the information about you, including your preferences and friend list.
+
+
 #### Delete account
 "Delete account" option deletes your account, need not worry, its asks for conformation. 
+
+
 #### Logout
 finally, you can logout to register sign in screen by selecting "Logout"
 
 
-Further Documentation Coming Soon ...
 
 ## Working of the App ⚙️
 
