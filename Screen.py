@@ -72,6 +72,7 @@ class Screen:
 
             indices = cutie.select_multiple(question['options'],
                                             maximal_count=Constants.QuestionsLimit,
+                                            minimal_count=1,
                                             hide_confirm=True)
 
             answers[question['header']] = [question['options'][index]
