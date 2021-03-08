@@ -1,4 +1,5 @@
 import pyfiglet
+import sys
 
 collectionName: str = "data"
 keysFile: str = "keys.json"
@@ -157,19 +158,36 @@ Questions = {
 
 }
 
-Messages = {
-    'header_message': '⬆️ for up ⬇️ for down 🚀 space to select ⏯ enter to confirm your '
-                      'selections ',
-    'username_taken': "⛔️ The username has already been take",
-    'registered_message': "Congratulations 🎉 you registered your self, now sign in with your "
-                          "user id to find some friends 👯‍ ",
-    'username_nonexistent': '⛔️ The username you entered is not registered',
-    'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
-                'profile 👨‍💼 or exit 🚪 ',
-    'choose_friends': '🙅 select the people you want to un-friend 🙅',
-    'no_friends': 'You have no friends 😞, click enter to Exit',
-    'NoRec': 'Sorry! there are no good recommendations for you 😞 come back later'
-}
+if sys.platform == 'darwin' or sys.platform == 'linux':
+
+    Messages = {
+        'header_message': '⬆️ for up ⬇️ for down 🚀 space to select ⏯ enter to confirm your '
+                          'selections ',
+        'username_taken': "⛔️ The username has already been take",
+        'registered_message': "Congratulations 🎉 you registered your self, now sign in with your "
+                              "user id to find some friends 👯‍ ",
+        'username_nonexistent': '⛔️ The username you entered is not registered',
+        'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
+                    'profile 👨‍💼 or exit 🚪 ',
+        'choose_friends': '🙅 select the people you want to un-friend 🙅',
+        'no_friends': 'You have no friends 😞, click enter to Exit',
+        'NoRec': 'Sorry! there are no good recommendations for you 😞 come back later'
+    }
+
+else:
+    Messages = {
+        'header_message': '(use arrow keys to move up and down, space bar to select and deselect,'
+                          ' and enter to confirm your selections)',
+        'username_taken': "(X) The username has already been take",
+        'registered_message': "Congratulations! you registered your self, now sign in with your "
+                              "user id to find some friends!",
+        'username_nonexistent': '(X) The username you entered is not registered',
+        'profiles': 'These are your friend recommendations, select one of them to see their '
+                    'profile or exit',
+        'choose_friends': 'Select the people you want to un-friend: ',
+        'no_friends': 'You have no friends :-(, click enter to Exit',
+        'NoRec': 'Sorry! there are no good recommendations for you :-( come back later'
+    }
 
 logo = """
    ******************************************************************

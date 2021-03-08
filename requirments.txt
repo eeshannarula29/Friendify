@@ -1,5 +1,4 @@
 firebase_admin
 PyInquirer
 cutie
-keyboard
 pyfiglet
