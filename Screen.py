@@ -297,7 +297,7 @@ class SignedIn(Screen):
 
         elif answer == 'Delete account':
 
-            confirmation = Screen.ask_question_PyInquirer(Constants.Questions['are_you_sure']).\
+            confirmation = Screen.ask_question_PyInquirer(Constants.Questions['are_you_sure']). \
                 get('answer')
 
             if confirmation:
@@ -323,6 +323,13 @@ class Recommendations(Screen):
         recommendations = RecommendationTree.get_recommendations_for(self.database,
                                                                      self.logged_in_as)
 
+        if recommendations == []:
+            return DocumentationScreen(self.database, Constants.Messages['NoRec'], is_path=False,
+                                       previous_screen=self.previous_screen)
+
+        if len(recommendations) > 10:
+            recommendations = recommendations[:10]
+            
         recommendations.extend(['Exit'])
 
         question = Constants.generate_question_with_choices(recommendations,

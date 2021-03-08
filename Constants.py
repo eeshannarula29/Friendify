@@ -6,7 +6,7 @@ aboutUs: str = "AboutUs.txt"
 
 QuestionsLimit: int = 3
 
-MinimumSimilarityScore = 4
+MinimumSimilarityScore = 2
 
 DataFile = 'data/Survey.csv'
 
@@ -167,7 +167,8 @@ Messages = {
     'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
                 'profile 👨‍💼 or exit 🚪 ',
     'choose_friends': '🙅 select the people you want to un-friend 🙅',
-    'no_friends': 'You have no friends 😞, click enter to Exit'
+    'no_friends': 'You have no friends 😞, click enter to Exit',
+    'NoRec': 'Sorry! there are no good recommendations for you 😞 come back later'
 }
 
 logo = """

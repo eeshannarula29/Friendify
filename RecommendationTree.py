@@ -4,6 +4,8 @@ from typing import Optional
 import Constants
 from DataHandler import DataHandler
 
+from random import choice
+
 ROOT = '*'
 
 
@@ -152,9 +154,16 @@ class RecommendationTree:
         else:
             users = []
 
+            found_any = False
+
             for subtree in self._subtrees:
                 if sequence[0] == subtree.value:
                     users.extend(subtree.search_tree(sequence[1:]))
+                    found_any = True
+
+            if not found_any:
+                random_subtree = choice(self._subtrees)
+                users.extend(random_subtree.search_tree(sequence[1:]))
 
             return users
 
@@ -188,6 +197,7 @@ class RecommendationTree:
 
         ids_and_count.sort()
         ids_and_count.pop()
+        ids_and_count.reverse()
 
         return [id_and_count[1] for id_and_count in ids_and_count
                 if id_and_count[0] >= Constants.MinimumSimilarityScore]
