@@ -23,13 +23,16 @@ We are using PyInquirer and cutie to get inputs from the terminal, which is
 used to navigate through the app.
 
 ## Running The App 📱
-
-After cloning the project or downloading it you just have to run this command 
+Cloning the project:
+```shell
+$ git clone https://github.com/eeshannarula29/Friendify.git
+```
+After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory. 
 ```shell
 $ Python3 main.py
 ```
 
-⚠️ Before running the app, you should full screen your console. And this app does not run on pycharm's console so you have to use your systems console. 
+⚠️ Before running the app, you should full screen your console, and this app does not run on Pycharm's console so you have to use your systems console. 
 
 ## Usage
 
@@ -101,7 +104,33 @@ All of them work in sync, to make the app work.
 - The data handler then sends this data to our Screen which take an action accordingly. 
 
 ### Friend Recommendations
-...
+![alt text](https://github.com/eeshannarula29/assets/blob/main/tree.jpeg?raw=true)
+
+- Friend recommendations are given using modified decision trees. The internal nodes are the preferences the users choose, and the root nodes are the users. </br>
+
+
+- As a user can choose at most 3 subcategories for all the 4 categories (movies, music, games and food), so the user can be a root value at most 3 to the power 4 times in the tree. 
+
+
+- For recommendation of friends, first this tree is created with all the data we initially have for all the users of the app.
+
+
+- This tree is then searched for with all the possible 81 (3 to the power 4) preference sequences of a user, and all the users at the end of those Sequence are stored in a collection.
+
+
+- Then we count how frequently the users are appearing in this collection, and sort the accordingly. 
+
+
+- The user is shown the top 10 users who have appeared most frequently, as friend recommendations. 
+
+#### Initial Data
+
+Initially, the app had no users, so if people signed in they would not have been able to find any friends. Thus we conducted a survey in which we asked people about their preferences. Then we registered all of these users to our app.
+
+
+The dataset is available in the data directory. We have scrapped the host address of the emails that the users have provided us, to maintain privacy.
+
+
 ### Network Visualization
 ...
 

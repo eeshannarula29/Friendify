@@ -329,7 +329,7 @@ class Recommendations(Screen):
 
         if len(recommendations) > 10:
             recommendations = recommendations[:10]
-            
+
         recommendations.extend(['Exit'])
 
         question = Constants.generate_question_with_choices(recommendations,
