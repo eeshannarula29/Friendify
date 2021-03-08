@@ -23,9 +23,15 @@ We are using PyInquirer and cutie to get inputs from the terminal, which is
 used to navigate through the app.
 
 ## Running The App 📱
-Cloning the project:
+Clone the project:
 ```shell
 $ git clone https://github.com/eeshannarula29/Friendify.git
+```
+Install the required libraries:
+```shell
+$ pip3 install firebase_admin
+$ pip3 install PyInquirer
+$ pip3 install cutie
 ```
 After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory, in your computer command-line interpreter (cmd/terminal)
 ```shell
