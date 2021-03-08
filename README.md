@@ -119,10 +119,10 @@ All of them work in sync, to make the app work.
 ### Friend Recommendations
 ![alt text](https://github.com/eeshannarula29/assets/blob/main/tree.jpeg?raw=true)
 
-- Friend recommendations are given using modified decision trees. The internal nodes are the preferences the users choose, and the root nodes are the users. </br>
+- Friend recommendations are given using modified decision trees. The internal nodes are the preferences the users choose, and the leaf nodes are the users. </br>
 
 
-- As a user can choose at most 3 subcategories for all the 4 categories (movies, music, games and food), so the user can be a root value at most 3 to the power 4 times in the tree. 
+- As a user can choose at most 3 subcategories for all the 4 categories (movies, music, games and food), so the user can be a leaf value at most 3 to the power 4 times in the tree. 
 
 
 - For recommendation of friends, first this tree is created with all the data we initially have for all the users of the app.
