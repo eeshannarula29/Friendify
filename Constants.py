@@ -147,13 +147,13 @@ Questions = {
         }
     ],
 
-    'movie_question': '🍿 select at most 3 movies that you like',
+    'movie_question': '🍿 select at least one and at most 3 movies that you like',
 
-    'music_question': '🎷 select at most 3 music categories that you like',
+    'music_question': '🎷 select at least one and at most 3 music categories that you like',
 
-    'game_question': '🎯 select at most 3 games that you like',
+    'game_question': '🎯 select at least one and at most 3 games that you like',
 
-    'food_question': '🍔 select at most 3 food categories that you like'
+    'food_question': '🍔 select at least one and at most 3 food categories that you like'
 
 }
 
