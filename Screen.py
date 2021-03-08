@@ -4,6 +4,7 @@ import Constants
 
 import os
 import sys
+import logging
 from typing import Optional, Any
 from DataHandler import DataHandler
 
@@ -11,6 +12,10 @@ from CustomExceptions import UserDoesNotExistsError, PrintingQuestionError
 
 from PyInquirer import prompt
 import cutie
+
+import dash
+import dash_html_components as html
+import dash_cytoscape as cyto
 
 from RecommendationTree import RecommendationTree
 
@@ -316,6 +321,40 @@ class SignedIn(Screen):
             else:
                 print('nothing happens')
                 return self
+
+        elif answer == 'View your network':
+
+            Screen.clear_screen()
+
+            Constants.printLogo()
+            Screen.print_space(1)
+            print(Constants.Messages['stop_graph'])
+            Screen.print_space(1)
+
+            graph_data = DataHandler.generate_graph_for_user(self.database,
+                                                             Constants.collectionName,
+                                                             self.logged_in_as, Constants.Depth)
+
+            app = dash.Dash(__name__)
+
+            log = logging.getLogger('werkzeug')
+            log.disabled = True
+
+            app.layout = html.Div([
+                html.P("Friendify Network"),
+                cyto.Cytoscape(
+                    id='cytoscape',
+                    elements=graph_data,
+                    layout={'name': 'breadthfirst'},
+                    style={'width': '1500px', 'height': '1000px'}
+                )
+            ])
+
+            app.run_server()
+
+            Screen.ask_question_PyInquirer(Constants.Questions['exit_question'])
+
+            return self
 
 
 class Recommendations(Screen):

@@ -205,6 +205,51 @@ class DataHandler:
         }
 
     @staticmethod
+    def generate_network(database, for_collection: str) -> list[dict]:
+        """ Generate graph for the whole app
+
+        :param for_collection: the collection in which user data is stored
+        :param database: The firebase database
+        :return: list of dicts contacting data of the graph
+        """
+        data = []
+
+        users = DataHandler.load_all(database, for_collection)
+
+        for user in users:
+            data.append({'data': {'id': user['userID'], 'label': user['userID']}})
+
+        for user in users:
+            for friend in user['friends']:
+                data.append({'data': {'source': user['userID'], 'target': friend}})
+
+        return data
+
+    @staticmethod
+    def generate_graph_for_user(database, for_collection: str, userID: str, depth: int) \
+            -> list[dict]:
+        """ Generate data for plotting a graph for al user
+
+        :param database: The firebase database
+        :param for_collection: the collection in which user data is stored
+        :param userID: the ID of the user
+        :param depth: depth of the network
+        :return: list of dicts contacting data of the graph
+        """
+
+        if depth == 0:
+            return [{'data': {'id': userID, 'label': userID}}]
+        else:
+            data_so_far = [{'data': {'id': userID, 'label': userID}}]
+
+            for friend in DataHandler.load_by_userID(database, for_collection, userID)['friends']:
+                data_so_far.extend(DataHandler.generate_graph_for_user(database, for_collection,
+                                                                       friend, depth - 1))
+                data_so_far.extend([{'data': {'source': userID, 'target': friend}}])
+
+            return data_so_far
+
+    @staticmethod
     def add_users_from_csv(database, from_collection: str, filename: str) -> None:
         """register all the users in the csv file to our app
 

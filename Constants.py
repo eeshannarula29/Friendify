@@ -9,6 +9,8 @@ QuestionsLimit: int = 3
 
 MinimumSimilarityScore = 2
 
+Depth = 3
+
 DataFile = 'data/Survey.csv'
 
 thankyou_message = "Thank you for using Friendify 🙏 😀"
@@ -109,7 +111,7 @@ Questions = {
             'type': 'list',
             'name': 'options',
             'message': 'What will you like to do',
-            'choices': ['see friend recommendations', 'change your preferences', 'Edit friends',
+            'choices': ['see friend recommendations', 'View your network', 'change your preferences', 'Edit friends',
                         'your profile', 'Delete account', 'Logout']
         }
     ],
@@ -171,7 +173,8 @@ if sys.platform == 'darwin' or sys.platform == 'linux':
                     'profile 👨‍💼 or exit 🚪 ',
         'choose_friends': '🙅 select the people you want to un-friend 🙅',
         'no_friends': 'You have no friends 😞, click enter to Exit',
-        'NoRec': 'Sorry! there are no good recommendations for you 😞 come back later'
+        'NoRec': 'Sorry! there are no good recommendations for you 😞 come back later',
+        'stop_graph': 'Press ^C (Control + C) to end the graph'
     }
 
 else:
@@ -186,7 +189,8 @@ else:
                     'profile or exit',
         'choose_friends': 'Select the people you want to un-friend: ',
         'no_friends': 'You have no friends :-(, click enter to Exit',
-        'NoRec': 'Sorry! there are no good recommendations for you :-( come back later'
+        'NoRec': 'Sorry! there are no good recommendations for you :-( come back later',
+        'stop_graph': 'Press CTRL + C to end the graph'
     }
 
 logo = """

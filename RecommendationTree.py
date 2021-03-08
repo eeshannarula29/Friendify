@@ -91,7 +91,7 @@ class RecommendationTree:
                 new_subtree.insert_user_helper(user, current_index + 1)
 
     @staticmethod
-    def create_combinations_from_user(user: dict, with_id:bool = True) -> list[list]:
+    def create_combinations_from_user(user: dict, with_id: bool = True) -> list[list]:
         """ Create all the possible combinations of user preferences for a single user
 
         :param user: The data of a user form our database
@@ -201,3 +201,33 @@ class RecommendationTree:
 
         return [id_and_count[1] for id_and_count in ids_and_count
                 if id_and_count[0] >= Constants.MinimumSimilarityScore]
+
+    @staticmethod
+    def make_friends(database) -> None:
+
+        users = DataHandler.load_all(database, Constants.collectionName)
+
+        for user in users:
+            recommendations = RecommendationTree.get_recommendations_for(database, user['userID'])
+
+            if len(recommendations) > 3:
+                recommendations = recommendations[:3]
+
+            for friend in recommendations:
+                DataHandler.add_friend(database, Constants.collectionName, user['userID'], friend)
+
+
+# This code is meant to add friends for the dummy users from the survey
+# This code is not meant to run.
+
+# if __name__ == '__main__':
+#     import firebase_admin
+#     from firebase_admin import credentials
+#     from firebase_admin import firestore
+#
+#     cred = credentials.Certificate(Constants.keysFile)
+#     firebase_admin.initialize_app(cred)
+#
+#     db = firestore.client()
+#
+#     RecommendationTree.make_friends(db)
