@@ -3,6 +3,7 @@ from __future__ import annotations
 import Constants
 
 import os
+import sys
 from typing import Optional, Any
 from DataHandler import DataHandler
 
@@ -37,8 +38,12 @@ class Screen:
 
     @staticmethod
     def clear_screen() -> bool:
-        os.system('clear')
-        return True
+        if sys.platform == 'darwin' or sys.platform == 'linux':
+            os.system('clear')
+            return True
+        else:
+            os.system('cls')
+            return True
 
     def show(self, clear_screen_before_present: bool = True) -> None:
 
