@@ -1,19 +1,12 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-
-import Constants
-
 import Screen
+
+from authenticate import DataHandler
 
 if __name__ == '__main__':
 
-    cred = credentials.Certificate(Constants.keysFile)
-    firebase_admin.initialize_app(cred)
+    data_handler = DataHandler()
 
-    db = firestore.client()
-
-    current_screen = Screen.HomeScreen(db)
+    current_screen = Screen.HomeScreen(data_handler)
 
     while current_screen is not None:
         current_screen = current_screen.show()

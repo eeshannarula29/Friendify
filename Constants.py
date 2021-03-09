@@ -103,6 +103,19 @@ Questions = {
             'type': 'input',
             'name': 'userID',
             'message': 'type your username',
+        },
+        {
+            'type': 'password',
+            'name': 'password',
+            'message': 'Type your password'
+        }
+    ],
+
+    'password_question': [
+        {
+            'type': 'password',
+            'name': 'password',
+            'message': 'Type your password (at least 6 characters long)'
         }
     ],
 
@@ -180,7 +193,8 @@ if sys.platform == 'darwin' or sys.platform == 'linux':
         'username_taken': "⛔️ The username has already been take",
         'registered_message': "Congratulations 🎉 you registered your self, now sign in with your "
                               "user id to find some friends 👯‍ ",
-        'username_nonexistent': '⛔️ The username you entered is not registered',
+        'username_nonexistent': '⛔️ The username you entered is not registered or the password is '
+                                'incorrect',
         'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
                     'profile 👨‍💼 or exit 🚪 ',
         'choose_friends': '🙅 select the people you want to un-friend 🙅',
@@ -196,7 +210,8 @@ else:
         'username_taken': "(X) The username has already been take",
         'registered_message': "Congratulations! you registered your self, now sign in with your "
                               "user id to find some friends!",
-        'username_nonexistent': '(X) The username you entered is not registered',
+        'username_nonexistent': '(X) The username you entered is not registered, or the password is'
+                                ' incorrect',
         'profiles': 'These are your friend recommendations, select one of them to see their '
                     'profile or exit',
         'choose_friends': 'Select the people you want to un-friend: ',
@@ -288,3 +303,14 @@ def change_depth(answer: object) -> int:
         return choices.index(answer) + 1
     else:
         return -1
+
+
+PyrebaseConfig = {
+    'apiKey': "AIzaSyDksNZ5vwpXXRIIE43UrwuzQ5vxQixKeZo",
+    'authDomain': "friendify-6a10b.firebaseapp.com",
+    'projectId': "friendify-6a10b",
+    'storageBucket': "friendify-6a10b.appspot.com",
+    'messagingSenderId': "866913733149",
+    'appId': "1:866913733149:web:144bf6a91b9bf8d13494f4",
+    'databaseURL': 'friendify-6a10b.appspot.com'
+}
