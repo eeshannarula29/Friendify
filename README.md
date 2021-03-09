@@ -180,3 +180,13 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 - [Pyfiglet](https://www.geeksforgeeks.org/python-ascii-art-using-pyfiglet-module/)
 
 - [Plotly](https://plotly.com/python/network-graphs/)
+
+## Bugs to Fix
+
+- People who are already friends, should not be shown as recommendations
+
+## Todo and Ideas
+
+- Add a "add friends" feature which lets you type users Id to add them as friend. 
+- customize graph layouts
+- add authentication with password
