@@ -132,7 +132,7 @@ Questions = {
             'name': 'options',
             'message': 'How deep do you want your graph to go ',
             'choices': ['See only your friends', 'See your friends and their friends',
-                        "See your friends, their and friends, and your friends' friends' friends",
+                        "See your friends, their friends, and your friends' friends' friends",
                         'Exit']
         }
     ],
@@ -282,7 +282,7 @@ def printLogo() -> None:
 
 def change_depth(answer: object) -> int:
     choices = ['See only your friends', 'See your friends and their friends',
-               "See your friends, their and friends, and your friends' friends' friends"]
+               "See your friends, their friends, and your friends' friends' friends"]
 
     if answer in choices:
         return choices.index(answer) + 1
