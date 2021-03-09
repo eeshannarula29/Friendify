@@ -331,30 +331,41 @@ class SignedIn(Screen):
             print(Constants.Messages['stop_graph'])
             Screen.print_space(1)
 
-            graph_data = DataHandler.generate_graph_for_user(self.database,
-                                                             Constants.collectionName,
-                                                             self.logged_in_as, Constants.Depth)
+            answer = Screen.ask_question_PyInquirer(Constants.Questions['depth_question']).\
+                get('options')
 
-            app = dash.Dash(__name__)
+            did_change = Constants.change_depth(answer)
 
-            log = logging.getLogger('werkzeug')
-            log.disabled = True
+            if did_change > 0:
 
-            app.layout = html.Div([
-                html.P("Friendify Network"),
-                cyto.Cytoscape(
-                    id='cytoscape',
-                    elements=graph_data,
-                    layout={'name': 'breadthfirst'},
-                    style={'width': '1500px', 'height': '1000px'}
-                )
-            ])
+                Constants.Depth = did_change
 
-            app.run_server()
+                graph_data = DataHandler.generate_graph_for_user(self.database,
+                                                                 Constants.collectionName,
+                                                                 self.logged_in_as, Constants.Depth)
+                app = dash.Dash(__name__)
 
-            Screen.ask_question_PyInquirer(Constants.Questions['exit_question'])
+                log = logging.getLogger('werkzeug')
+                log.disabled = True
 
-            return self
+                app.layout = html.Div([
+                    html.P("Friendify Network"),
+                    cyto.Cytoscape(
+                        id='cytoscape',
+                        elements=graph_data,
+                        layout={'name': 'breadthfirst'},
+                        style={'width': '1500px', 'height': '1000px'}
+                    )
+                ])
+
+                app.run_server()
+
+                Screen.ask_question_PyInquirer(Constants.Questions['exit_question'])
+
+                return self
+
+            else:
+                return self
 
 
 class Recommendations(Screen):

@@ -111,7 +111,8 @@ Questions = {
             'type': 'list',
             'name': 'options',
             'message': 'What will you like to do',
-            'choices': ['see friend recommendations', 'View your network', 'change your preferences', 'Edit friends',
+            'choices': ['see friend recommendations', 'View your network',
+                        'change your preferences', 'Edit friends',
                         'your profile', 'Delete account', 'Logout']
         }
     ],
@@ -122,6 +123,17 @@ Questions = {
             'name': 'options',
             'message': 'Welcome to Friendify',
             'choices': ['About Us', 'Sign-in/Register', 'Exit']
+        }
+    ],
+
+    'depth_question': [
+        {
+            'type': 'list',
+            'name': 'options',
+            'message': 'How deep do you want your graph to go ',
+            'choices': ['See only your friends', 'See your friends and their friends',
+                        "See your friends, their and friends, and your friends' friends' friends",
+                        'Exit']
         }
     ],
 
@@ -266,3 +278,13 @@ def generate_question_multiple_choice(choices: list[dict], message: str):
 def printLogo() -> None:
     custom_fig = pyfiglet.figlet_format('Friendify 👯‍')
     print(custom_fig)
+
+
+def change_depth(answer: object) -> int:
+    choices = ['See only your friends', 'See your friends and their friends',
+               "See your friends, their and friends, and your friends' friends' friends"]
+
+    if answer in choices:
+        return choices.index(answer) + 1
+    else:
+        return -1
