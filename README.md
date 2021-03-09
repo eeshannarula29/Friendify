@@ -205,3 +205,7 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 - customize graph layouts
 - add authentication with password
 - Friendify network, contaning all the users
+- private and public accounts
+- only friends can see their friends' friends or the whole profile
+- friend requests instead of directly adding friends
+- inbuilt chat system
