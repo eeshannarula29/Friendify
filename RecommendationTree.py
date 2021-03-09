@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional
 
 import Constants
-from DataHandler import DataHandler
+from authenticate import DataHandler
 
 from random import choice
 
@@ -125,14 +125,13 @@ class RecommendationTree:
         return users
 
     @staticmethod
-    def generate_tree(database) -> RecommendationTree:
+    def generate_tree(handler: DataHandler) -> RecommendationTree:
         """ Generate a tree by inserting all possible preferences of all the users
         in our database, with the root of a single combination being the userID.
 
-        :param database: the firebase database object
         :return: RecommendationTree
         """
-        data = DataHandler.load_all(database, Constants.collectionName)
+        data = handler.get_all_data()
 
         users = RecommendationTree.create_combinations_from_multiple_users(data)
 
@@ -168,16 +167,16 @@ class RecommendationTree:
             return users
 
     @staticmethod
-    def get_recommendations_for(db, userID: str) -> list[str]:
+    def get_recommendations_for(handler: DataHandler, userID: str) -> list[str]:
         """ Return the top recommendations for a user with userID <userID>
 
-        :param db: the firebase database object
+        :param handler: Data handler
         :param userID: user ID for the user we want the recommendations
         :return: list of user id's
         """
-        tree = RecommendationTree.generate_tree(db)
+        tree = RecommendationTree.generate_tree(handler)
 
-        user = DataHandler.load_by_userID(db, Constants.collectionName, userID)
+        user = handler.get_user_data(userID)
 
         combinations = RecommendationTree.create_combinations_from_user(user)
 
@@ -203,18 +202,18 @@ class RecommendationTree:
                 if id_and_count[0] >= Constants.MinimumSimilarityScore]
 
     @staticmethod
-    def make_friends(database) -> None:
+    def make_friends(handler: DataHandler) -> None:
 
-        users = DataHandler.load_all(database, Constants.collectionName)
+        users = handler.get_all_data()
 
         for user in users:
-            recommendations = RecommendationTree.get_recommendations_for(database, user['userID'])
+            recommendations = RecommendationTree.get_recommendations_for(handler, user['userID'])
 
             if len(recommendations) > 3:
                 recommendations = recommendations[:3]
 
             for friend in recommendations:
-                DataHandler.add_friend(database, Constants.collectionName, user['userID'], friend)
+                handler.add_friend(user['userID'], friend)
 
 
 # This code is meant to add friends for the dummy users from the survey

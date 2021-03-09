@@ -73,13 +73,13 @@ From here you can go onto signing in or registering. If you press exit you will 
 
 If you go to registration, you would be asked for a new username. After your username you would have to answer some questions about your interests, which would be used to match you up with your new friends 👯‍. This is how it looks (its a gif, if it does not start click on it)
 
-![alt text](https://github.com/eeshannarula29/assets/blob/main/register.gif?raw=true)
+![alt text](https://github.com/eeshannarula29/assets/blob/main/registration_auth.gif?raw=true)
 
 If you do something wrong don't worry you can change your answers afterwards 😀. After the registration the home screen will open (coming below ⬇️).
 
-### Sign up
+### Sign In
 
-For signing up you would just have to fill in your username with which you registered and your home screen will open 🚪.
+For signing in you would just have to fill in your username with which you registered and your password, and your home screen will open 🚪.
 
 ### Home Screen 🏡
 
@@ -201,11 +201,11 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 
 ## Todo and Ideas 💡
 
-- Add a "add friends" feature which lets you type users Id to add them as friend. 
-- customize graph layouts
-- add authentication with password
-- Friendify network, contaning all the users
-- private and public accounts
-- only friends can see their friends' friends or the whole profile
-- friend requests instead of directly adding friends
-- inbuilt chat system
+- [ ] Add a "add friends" feature which lets you type users Id to add them as friend.
+- [ ] customize graph layouts
+- [x] add authentication with password
+- [ ] Friendify network, contaning all the users
+- [ ] private and public accounts
+- [ ] only friends can see their friends' friends or the whole profile
+- [ ] friend requests instead of directly adding friends
+- [ ] inbuilt chat system

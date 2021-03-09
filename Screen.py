@@ -6,7 +6,6 @@ import os
 import sys
 import logging
 from typing import Optional, Any
-from DataHandler import DataHandler
 
 from CustomExceptions import UserDoesNotExistsError, PrintingQuestionError
 
@@ -19,17 +18,20 @@ import dash_cytoscape as cyto
 
 from RecommendationTree import RecommendationTree
 
+from authenticate import DataHandler
+
 
 class Screen:
     """This is a super class for other subscales for different screens"""
 
-    def __init__(self, db, previous_screen: Optional[Screen] = None, userID: Optional[str] = None):
+    def __init__(self, data_handler: DataHandler, previous_screen: Optional[Screen] = None,
+                 userID: Optional[str] = None):
 
-        self.database = db
+        self.handler = data_handler
         self.previous_screen = previous_screen
 
         if userID:
-            if DataHandler.is_user(db, Constants.collectionName, userID):
+            if self.handler.is_user(userID):
                 self.logged_in_as = userID
             else:
                 raise UserDoesNotExistsError
@@ -102,11 +104,11 @@ class HomeScreen(Screen):
             get('options', 'stay')
 
         if answer == 'About Us':
-            return DocumentationScreen(self.database, Constants.aboutUs, previous_screen=self,
+            return DocumentationScreen(self.handler, Constants.aboutUs, previous_screen=self,
                                        userID=self.logged_in_as)
 
         elif answer == 'Sign-in/Register':
-            return SignInUp(self.database, previous_screen=self, userID=self.logged_in_as)
+            return SignInUp(self.handler, previous_screen=self, userID=self.logged_in_as)
 
         elif answer == 'stay':
             return self
@@ -117,11 +119,11 @@ class HomeScreen(Screen):
 
 class DocumentationScreen(Screen):
 
-    def __init__(self, db, document_path_or_string: str, is_path: Optional[bool] = True,
+    def __init__(self, data_handler, document_path_or_string: str, is_path: Optional[bool] = True,
                  previous_screen: Optional[Screen] = None, userID: Optional[str] = None,
                  custom_questions: list[(list[dir], Any)] = None) -> None:
 
-        super().__init__(db, previous_screen=previous_screen, userID=userID)
+        super().__init__(data_handler, previous_screen=previous_screen, userID=userID)
         self.document_path_or_string = document_path_or_string
         self.is_path = is_path
         self.custom_questions = custom_questions
@@ -169,9 +171,9 @@ class SignInUp(Screen):
             get('options', 'stay')
 
         if answer == 'Register':
-            return Register(self.database, previous_screen=self, userID=self.logged_in_as)
+            return Register(self.handler, previous_screen=self, userID=self.logged_in_as)
         elif answer == 'Sign in':
-            return SignIn(self.database, self, self.logged_in_as)
+            return SignIn(self.handler, self, self.logged_in_as)
         elif answer == 'stay':
             return self
         else:
@@ -185,32 +187,42 @@ class Register(Screen):
 
         Constants.printLogo() if show_logo else False
 
-        self.logged_in_as = Screen.ask_question_PyInquirer(Constants.Questions['UserID_question'])[
-            'userID']
+        self.logged_in_as = Screen.ask_question_PyInquirer(Constants.Questions['UserID_question']).\
+            get('userID', '')
 
-        while DataHandler.is_user(self.database, Constants.collectionName, self.logged_in_as):
+        while self.handler.is_user(self.logged_in_as):
 
             print(Constants.Messages['username_taken'])
 
-            question = Constants.generate_question_with_choices(['Try again', 'Exit'],
-                                                                "Do you want to:")
+            question = Constants.generate_question_with_choices(['Exit'], "")
 
-            answer = Screen.ask_question_PyInquirer(question).get('options')
+            Screen.ask_question_PyInquirer(question)
+
+            return self.previous_screen
+
+        password = Screen.ask_question_PyInquirer(Constants.Questions['password_question']).\
+            get('password', '')
+
+        while len(password) < 6:
+
+            print(Constants.Messages['short_password'])
+
+            question = Constants.generate_question_with_choices(['Try again', 'Exit'], "")
+
+            answer = Screen.ask_question_PyInquirer(question).get('options', 'stay')
 
             if answer == 'Try again':
-                self.show(clear_screen_before_present=False)
+                password = Screen.ask_question_PyInquirer(Constants.Questions['password_question'])\
+                    .get('password', '')
             else:
                 return self.previous_screen
 
         answers = Screen.ask_multi_choice_question_cutie(Constants.Messages['header_message'],
                                                          Constants.ProfileQuestions)
 
-        answers['userID'] = self.logged_in_as
-        answers['friends'] = []
+        self.handler.register(self.logged_in_as, password, answers)
 
-        DataHandler.register(self.database, Constants.collectionName, self.logged_in_as, answers)
-
-        return SignedIn(self.database, self.previous_screen, self.logged_in_as)
+        return SignedIn(self.handler, self.previous_screen, self.logged_in_as)
 
 
 class SignIn(Screen):
@@ -220,24 +232,22 @@ class SignIn(Screen):
 
         Constants.printLogo() if show_logo else False
 
-        self.logged_in_as = \
-            Screen.ask_question_PyInquirer(Constants.Questions['sign_in_questions']).get('userID')
+        credentials = Screen.ask_question_PyInquirer(Constants.Questions['sign_in_questions'])
 
-        while not DataHandler.is_user(self.database, Constants.collectionName, self.logged_in_as):
+        self.logged_in_as = credentials.get('userID')
+        password = credentials.get('password')
+
+        while not self.handler.sign_in(self.logged_in_as, password):
 
             print(Constants.Messages['username_nonexistent'])
 
-            question = Constants.generate_question_with_choices(['Try again', 'Exit'],
-                                                                "Do you want to:")
+            question = Constants.generate_question_with_choices(['Exit'], "")
 
-            answer = Screen.ask_question_PyInquirer(question).get('options')
+            Screen.ask_question_PyInquirer(question)
 
-            if answer == 'Try again':
-                self.show(clear_screen_before_present=False)
-            else:
-                return self.previous_screen
+            return self.previous_screen
 
-        return SignedIn(self.database, self.previous_screen, self.logged_in_as)
+        return SignedIn(self.handler, self.previous_screen, self.logged_in_as)
 
 
 class SignedIn(Screen):
@@ -256,24 +266,22 @@ class SignedIn(Screen):
 
         if answer == 'see friend recommendations':
 
-            return Recommendations(self.database, self, self.logged_in_as)
+            return Recommendations(self.handler, self, self.logged_in_as)
 
         elif answer == 'change your preferences':
 
             answers = Screen.ask_multi_choice_question_cutie(Constants.Messages['header_message'],
                                                              Constants.ProfileQuestions)
 
-            DataHandler.update_data_by_ID(self.database, Constants.collectionName,
-                                          self.logged_in_as, answers)
+            self.handler.update_user_data(self.logged_in_as, answers)
 
             return self
 
         elif answer == 'your profile':
 
-            data = DataHandler.load_by_userID(self.database, Constants.collectionName,
-                                              self.logged_in_as)
+            data = self.handler.get_user_data(self.logged_in_as)
 
-            return DocumentationScreen(self.database, Constants.profile(data), is_path=False,
+            return DocumentationScreen(self.handler, Constants.profile(data), is_path=False,
                                        previous_screen=self,
                                        userID=self.logged_in_as)
 
@@ -285,8 +293,7 @@ class SignedIn(Screen):
 
         elif answer == 'Edit friends':
 
-            friends = DataHandler.load_by_userID(self.database, Constants.collectionName,
-                                                 self.logged_in_as).get('friends')
+            friends = self.handler.get_user_data(self.logged_in_as).get('friends')
 
             choices = [{'name': friend} for friend in friends]
 
@@ -295,14 +302,13 @@ class SignedIn(Screen):
                                                                         'choose_friends'])
 
             if friends == []:
-                return DocumentationScreen(self.database, Constants.Messages['no_friends'],
+                return DocumentationScreen(self.handler, Constants.Messages['no_friends'],
                                            is_path=False, previous_screen=self)
 
             un_friend_list = Screen.ask_question_PyInquirer(questions).get('options', [])
 
             for friend in un_friend_list:
-                DataHandler.un_friend(self.database, Constants.collectionName,
-                                      by=self.logged_in_as, to=friend)
+                self.handler.un_friend(by=self.logged_in_as, to=friend)
 
             return self
 
@@ -313,9 +319,9 @@ class SignedIn(Screen):
 
             if confirmation:
 
-                DataHandler.delete_user(self.database, Constants.collectionName, self.logged_in_as)
+                self.handler.delete_user(self.logged_in_as)
 
-                return DocumentationScreen(self.database, Constants.thankyou_message, is_path=False,
+                return DocumentationScreen(self.handler, Constants.thankyou_message, is_path=False,
                                            previous_screen=self.previous_screen)
 
             else:
@@ -340,9 +346,8 @@ class SignedIn(Screen):
 
                 Constants.Depth = did_change
 
-                graph_data = DataHandler.generate_graph_for_user(self.database,
-                                                                 Constants.collectionName,
-                                                                 self.logged_in_as, Constants.Depth)
+                graph_data = self.handler.generate_graph_for_user(self.logged_in_as,
+                                                                  Constants.Depth)
                 app = dash.Dash(__name__)
 
                 log = logging.getLogger('werkzeug')
@@ -376,11 +381,11 @@ class Recommendations(Screen):
 
         Constants.printLogo()
 
-        recommendations = RecommendationTree.get_recommendations_for(self.database,
+        recommendations = RecommendationTree.get_recommendations_for(self.handler,
                                                                      self.logged_in_as)
 
         if recommendations == []:
-            return DocumentationScreen(self.database, Constants.Messages['NoRec'], is_path=False,
+            return DocumentationScreen(self.handler, Constants.Messages['NoRec'], is_path=False,
                                        previous_screen=self.previous_screen)
 
         if len(recommendations) > 10:
@@ -400,18 +405,17 @@ class Recommendations(Screen):
             return self
 
         else:
-            user_data = DataHandler.load_by_userID(self.database, Constants.collectionName, answer)
+            user_data = self.handler.get_user_data(answer)
 
             questions = [
 
                 (Constants.Questions['add_friend_question'],
-                 lambda ans: DataHandler.add_friend(self.database, Constants.collectionName,
-                                                    of=self.logged_in_as, to=answer)
+                 lambda ans: self.handler.add_friend(of=self.logged_in_as, to=answer)
                  if ans else None, 'add_friend'),
 
                 (Constants.Questions['exit_question'], lambda _: self, 'quit')
             ]
 
-            return DocumentationScreen(self.database, Constants.profile(user_data), is_path=False,
+            return DocumentationScreen(self.handler, Constants.profile(user_data), is_path=False,
                                        previous_screen=self, userID=self.logged_in_as,
                                        custom_questions=questions)
