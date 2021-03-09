@@ -200,7 +200,8 @@ if sys.platform == 'darwin' or sys.platform == 'linux':
         'choose_friends': '🙅 select the people you want to un-friend 🙅',
         'no_friends': 'You have no friends 😞, click enter to Exit',
         'NoRec': 'Sorry! there are no good recommendations for you 😞 come back later',
-        'stop_graph': 'Press ^C (Control + C) to end the graph'
+        'stop_graph': 'Press ^C (Control + C) to end the graph',
+        'short_password': '⛔️ The password you typed is shorter than 6 characters'
     }
 
 else:
@@ -217,7 +218,8 @@ else:
         'choose_friends': 'Select the people you want to un-friend: ',
         'no_friends': 'You have no friends :-(, click enter to Exit',
         'NoRec': 'Sorry! there are no good recommendations for you :-( come back later',
-        'stop_graph': 'Press CTRL + C to end the graph'
+        'stop_graph': 'Press CTRL + C to end the graph',
+        'short_password': 'The password you typed is shorter than 6 characters'
     }
 
 logo = """

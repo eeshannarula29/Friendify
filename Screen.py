@@ -207,8 +207,15 @@ class Register(Screen):
 
             print(Constants.Messages['short_password'])
 
-            password = Screen.ask_question_PyInquirer(Constants.Questions['password_question'])\
-                .get('password', '')
+            question = Constants.generate_question_with_choices(['Try again', 'Exit'], "")
+
+            answer = Screen.ask_question_PyInquirer(question).get('options', 'stay')
+
+            if answer == 'Try again':
+                password = Screen.ask_question_PyInquirer(Constants.Questions['password_question'])\
+                    .get('password', '')
+            else:
+                return self.previous_screen
 
         answers = Screen.ask_multi_choice_question_cutie(Constants.Messages['header_message'],
                                                          Constants.ProfileQuestions)
