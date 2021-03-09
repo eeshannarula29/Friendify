@@ -32,6 +32,8 @@ Install the required libraries:
 $ pip3 install firebase_admin
 $ pip3 install PyInquirer
 $ pip3 install cutie
+$ pip3 install dash
+$ pip3 install dash_cytoscape 
 ```
 After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory, in your computer command-line interpreter (cmd/terminal)
 ```shell
@@ -73,14 +75,26 @@ For signing up you would just have to fill in your username with which you regis
 
 Finally, you have entered you home screen. Now you can make new friends 🎉 Yeye !
 
-![alt text](https://github.com/eeshannarula29/assets/blob/main/signed_in.png?raw=true)
+![alt text](https://github.com/eeshannarula29/assets/blob/main/signed_in_2.png?raw=true)
 #### See friend recommendations
 if you click on "See friend recommendations" you will get redirected to a screen where you can see the top recommendation for you. You can select anyone of them to see their profiles and add them as your friends.
+![alt text](https://github.com/eeshannarula29/assets/blob/main/rec_screen.png?raw=true)
 
+The recommendations are from the highest to the lowest matching score with you. You can now select anyone of them to see their profile. Let us select the user with the username "nothanks". This is what will pop up 
+
+![alt text](https://github.com/eeshannarula29/assets/blob/main/user_profile_rec.png?raw=true)
+
+From here you can add them as your friend, or not if you don't want to and go back to see other people who were recommended to you.
 
 #### View your network
-...
+You can view your network by clicking on the option "View your network". Your network shows you who you are friends with who they are friends with, to make a network graph. When you select this option the following srenn will pop up
 
+![alt text](https://github.com/eeshannarula29/assets/blob/main/url.png?raw=true)
+
+You can type the url in your browser to to see a graph like this
+![alt text](https://github.com/eeshannarula29/assets/blob/main/graph.gif?raw=true)
+
+The graph is made with Dash which is a sub library of plotly
 
 #### change your preferences
 The "change your preferences" option is for changing the answers to the questions you were asked while registrations. These are used to give you your friend recommendations.
@@ -89,14 +103,15 @@ The "change your preferences" option is for changing the answers to the question
 #### Unfriend people
 If you want to Un friend people, you can go the "Edit friends" option, where you can select multiple people at once, who you want to unfriend. 
 
-
+![alt text](https://github.com/eeshannarula29/assets/blob/main/unfriend.png?raw=true)
 #### View profile
 To view your profile you have to go to the "your profile" option which has all the information about you, including your preferences and friend list.
 
-
+![alt text](https://github.com/eeshannarula29/assets/blob/main/profile.png?raw=true)
 #### Delete account
 "Delete account" option deletes your account, need not worry, its asks for conformation. 
 
+![alt text](https://github.com/eeshannarula29/assets/blob/main/delete_account.gif?raw=true)
 
 #### Logout
 finally, you can logout to register sign in screen by selecting "Logout"
@@ -151,8 +166,9 @@ The dataset is available in the data directory. We have scrapped the host addres
 
 
 ### Network Visualization
-...
+All of our data is stored in firebase. The way it is stored is very similar to a graph object. The users stored in the database act like the vertices of the graph and the database acts like the graph itself. Each vertex stores its neighbours, which are other users in our case, and this edge between two users is the friendship between them.
 
+Using this ideology, we then, for a specific user, get access to its vertex in the graph, and recursively got hold of their friends, their friends' friends and so on, to get formatted data for plotting a graph in Dash library. For now we have set the depth to be 3, so user can see their friends, and  their friends' friends.
 ## Documentation of libraries used 📚
 
 - [Firebase](https://firebase.google.com/docs/reference/admin/python/firebase_admin) 
