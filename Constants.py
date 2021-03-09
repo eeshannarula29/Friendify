@@ -9,7 +9,7 @@ QuestionsLimit: int = 3
 
 MinimumSimilarityScore = 2
 
-Depth = 3
+Depth = 2
 
 DataFile = 'data/Survey.csv'
 

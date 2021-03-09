@@ -102,7 +102,7 @@ You can view your network by clicking on the option "View your network". Your ne
 ![alt text](https://github.com/eeshannarula29/assets/blob/main/url.png?raw=true)
 
 You can type the url in your browser to to see a graph like this
-![alt text](https://github.com/eeshannarula29/assets/blob/main/graph.gif?raw=true)
+![alt text](https://github.com/eeshannarula29/assets/blob/main/graph_2.gif?raw=true)
 
 The graph is made with Dash which is a sub library of plotly
 
@@ -178,7 +178,7 @@ The dataset is available in the data directory. We have scrapped the host addres
 ### Network Visualization
 All of our data is stored in firebase. The way it is stored is very similar to a graph object. The users stored in the database act like the vertices of the graph and the database acts like the graph itself. Each vertex stores its neighbours, which are other users in our case, and this edge between two users is the friendship between them.
 
-Using this ideology, we then, for a specific user, get access to its vertex in the graph, and recursively got hold of their friends, their friends' friends and so on, to get formatted data for plotting a graph in Dash library. For now we have set the depth to be 3, so user can see their friends, and  their friends' friends.
+Using this ideology, we then, for a specific user, get access to its vertex in the graph, and recursively got hold of their friends, their friends' friends and so on, to get formatted data for plotting a graph in Dash library. For now we have set the depth to be 2, so user can see their friends, and their friends' friends.
 ## Documentation of libraries used 📚
 
 - [Firebase](https://firebase.google.com/docs/reference/admin/python/firebase_admin) 
@@ -200,3 +200,4 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 - Add a "add friends" feature which lets you type users Id to add them as friend. 
 - customize graph layouts
 - add authentication with password
+- Friendify network, contaning all the users
