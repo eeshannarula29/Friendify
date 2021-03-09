@@ -50,7 +50,7 @@ If you want to run this app on Pycharm then follow these steps:
 
 3) Click on terminal, below the navigation bar on the left side of the screen
 
-4) type ``` $ Python3 main.py ``` in the terminal
+4) type ``` $ python3 main.py ``` in the terminal
 
 ## Usage
 
