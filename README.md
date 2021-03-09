@@ -97,9 +97,13 @@ The recommendations are from the highest to the lowest matching score with you. 
 From here you can add them as your friend, or not if you don't want to and go back to see other people who were recommended to you.
 
 #### View your network
-You can view your network by clicking on the option "View your network". Your network shows you who you are friends with who they are friends with, to make a network graph. When you select this option the following srenn will pop up
+You can view your network by clicking on the option "View your network". Your network shows you who you are friends with who they are friends with, to make a network graph. When you select this option the following screen will pop up
 
-![alt text](https://github.com/eeshannarula29/assets/blob/main/url.png?raw=true)
+![alt text](https://github.com/eeshannarula29/assets/blob/main/graph_depth.png?raw=true)
+
+After selecting one of the options, the screen shoudl look like this
+
+![alt text](https://github.com/eeshannarula29/assets/blob/main/graph_init_2.png?raw=true)
 
 You can type the url in your browser to to see a graph like this
 ![alt text](https://github.com/eeshannarula29/assets/blob/main/graph_2.gif?raw=true)
