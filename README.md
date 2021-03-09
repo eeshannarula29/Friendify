@@ -191,11 +191,11 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 
 - [Plotly](https://plotly.com/python/network-graphs/)
 
-## Bugs to Fix
+## Bugs to Fix 🐞
 
 - People who are already friends, should not be shown as recommendations
 
-## Todo and Ideas
+## Todo and Ideas 💡
 
 - Add a "add friends" feature which lets you type users Id to add them as friend. 
 - customize graph layouts
