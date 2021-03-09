@@ -37,10 +37,20 @@ $ pip3 install dash_cytoscape
 ```
 After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory, in your computer command-line interpreter (cmd/terminal)
 ```shell
-$ Python3 main.py
+$ python3 main.py
 ```
 
-⚠️ Before running the app, you should full screen your console, and this app does not run on Pycharm's console so you have to use your system's command-line interpreter. 
+⚠️ Before running the app, you should full screen your console.
+
+If you want to run this app on Pycharm then follow these steps:
+
+1) download all the requirements
+
+2) open your project in Pycharm
+
+3) Click on terminal, below the navigation bar on the left side of the screen
+
+4) type ``` $ Python3 main.py ``` in the terminal
 
 ## Usage
 
