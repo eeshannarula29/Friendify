@@ -79,7 +79,7 @@ If you do something wrong don't worry you can change your answers afterwards �
 
 ### Sign In
 
-For signing up you would just have to fill in your username with which you registered and your password, and your home screen will open 🚪.
+For signing in you would just have to fill in your username with which you registered and your password, and your home screen will open 🚪.
 
 ### Home Screen 🏡
 
@@ -201,11 +201,11 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 
 ## Todo and Ideas 💡
 
-- Add a "add friends" feature which lets you type users Id to add them as friend. 
-- customize graph layouts
-- add authentication with password
-- Friendify network, contaning all the users
-- private and public accounts
-- only friends can see their friends' friends or the whole profile
-- friend requests instead of directly adding friends
-- inbuilt chat system
+- [ ] Add a "add friends" feature which lets you type users Id to add them as friend.
+- [ ] customize graph layouts
+- [x] add authentication with password
+- [ ] Friendify network, contaning all the users
+- [ ] private and public accounts
+- [ ] only friends can see their friends' friends or the whole profile
+- [ ] friend requests instead of directly adding friends
+- [ ] inbuilt chat system
