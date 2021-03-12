@@ -15,6 +15,10 @@ import cutie
 import dash
 import dash_html_components as html
 import dash_cytoscape as cyto
+import dash_core_components as dcc
+from dash.dependencies import Input, Output
+
+import webbrowser
 
 from RecommendationTree import RecommendationTree
 
@@ -55,7 +59,6 @@ class Screen:
     def show(self, clear_screen_before_present: bool = True) -> None:
 
         """Show the current screen
-
         :param clear_screen_before_present: clear the terminal before presenting
         """
 
@@ -353,17 +356,36 @@ class SignedIn(Screen):
                 log = logging.getLogger('werkzeug')
                 log.disabled = True
 
+                @app.callback(Output('cytoscape', 'layout'),
+                              Input('dropdown', 'value'))
+                def update_layout(layout) -> dict:
+                    return {
+                        'name': layout,
+                        'animate': True
+                    }
+
                 app.layout = html.Div([
                     html.P("Friendify Network"),
+                    dcc.Dropdown(
+                        id='dropdown',
+                        value='breadthfirst',
+                        clearable=False,
+                        options=[
+                            {'label': name.capitalize(), 'value': name}
+                            for name in ['breadthfirst', 'grid', 'random', 'circle', 'cose',
+                                         'concentric']
+                        ]
+                    ),
                     cyto.Cytoscape(
                         id='cytoscape',
                         elements=graph_data,
                         layout={'name': 'breadthfirst'},
-                        style={'width': '1500px', 'height': '1000px'}
-                    )
+                        style={'width': '1500px', 'height': '800px'}
+                    ),
                 ])
 
-                app.run_server()
+                webbrowser.open_new('http://127.0.0.1:5000/')
+                app.run_server(port=5000)
 
                 Screen.ask_question_PyInquirer(Constants.Questions['exit_question'])
 
