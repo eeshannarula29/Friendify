@@ -30,10 +30,12 @@ $ git clone https://github.com/eeshannarula29/Friendify.git
 Install the required libraries:
 ```shell
 $ pip3 install firebase_admin
+$ pip3 install Pyrebase
 $ pip3 install PyInquirer
 $ pip3 install cutie
 $ pip3 install dash
 $ pip3 install dash_cytoscape 
+$ pip3 install pyfiglet
 ```
 After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory, in your computer command-line interpreter (cmd/terminal)
 ```shell
@@ -187,6 +189,8 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 
 - [Firebase](https://firebase.google.com/docs/reference/admin/python/firebase_admin) 
 
+- [Pyrebase](https://github.com/thisbejim/Pyrebase)
+  
 - [PyInquirer](https://github.com/CITGuru/PyInquirer)
 
 - [Cutie](https://pypi.org/project/cutie/)

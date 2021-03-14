@@ -2,3 +2,7 @@ firebase_admin
 PyInquirer
 cutie
 pyfiglet
+Pyrebase
+dash
+dash_cytoscape
+
