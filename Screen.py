@@ -4,7 +4,6 @@ import Constants
 
 import os
 import sys
-import logging
 from typing import Optional, Any
 
 from CustomExceptions import UserDoesNotExistsError, PrintingQuestionError
@@ -12,17 +11,9 @@ from CustomExceptions import UserDoesNotExistsError, PrintingQuestionError
 from PyInquirer import prompt
 import cutie
 
-import dash
-import dash_html_components as html
-import dash_cytoscape as cyto
-import dash_core_components as dcc
-from dash.dependencies import Input, Output
-
-import webbrowser
-
-from RecommendationTree import RecommendationTree
-
 from authenticate import DataHandler
+
+from RecommendationGraph import Graph
 
 
 class Screen:
@@ -349,43 +340,10 @@ class SignedIn(Screen):
 
                 Constants.Depth = did_change
 
-                graph_data = self.handler.generate_graph_for_user(self.logged_in_as,
-                                                                  Constants.Depth)
-                app = dash.Dash(__name__)
+                graph = Graph.load_friends_graph(self.handler).\
+                    generate_users_graph_for_user(self.logged_in_as, Constants.Depth)
 
-                log = logging.getLogger('werkzeug')
-                log.disabled = True
-
-                @app.callback(Output('cytoscape', 'layout'),
-                              Input('dropdown', 'value'))
-                def update_layout(layout) -> dict:
-                    return {
-                        'name': layout,
-                        'animate': True
-                    }
-
-                app.layout = html.Div([
-                    html.P("Friendify Network"),
-                    dcc.Dropdown(
-                        id='dropdown',
-                        value='breadthfirst',
-                        clearable=False,
-                        options=[
-                            {'label': name.capitalize(), 'value': name}
-                            for name in ['breadthfirst', 'grid', 'random', 'circle', 'cose',
-                                         'concentric']
-                        ]
-                    ),
-                    cyto.Cytoscape(
-                        id='cytoscape',
-                        elements=graph_data,
-                        layout={'name': 'breadthfirst'},
-                        style={'width': '1500px', 'height': '800px'}
-                    ),
-                ])
-
-                webbrowser.open_new('http://127.0.0.1:5000/')
-                app.run_server(port=5000)
+                graph.plot()
 
                 Screen.ask_question_PyInquirer(Constants.Questions['exit_question'])
 
@@ -403,15 +361,13 @@ class Recommendations(Screen):
 
         Constants.printLogo()
 
-        recommendations = RecommendationTree.get_recommendations_for(self.handler,
-                                                                     self.logged_in_as)
+        graph = Graph.load_friends_graph(self.handler)
+
+        recommendations = graph.recommend_friends(self.logged_in_as, 10)
 
         if recommendations == []:
             return DocumentationScreen(self.handler, Constants.Messages['NoRec'], is_path=False,
                                        previous_screen=self.previous_screen)
-
-        if len(recommendations) > 10:
-            recommendations = recommendations[:10]
 
         recommendations.extend(['Exit'])
 
@@ -427,7 +383,10 @@ class Recommendations(Screen):
             return self
 
         else:
-            user_data = self.handler.get_user_data(answer)
+
+            user = answer.split(' ')[0]
+
+            user_data = self.handler.get_user_data(user)
 
             questions = [
 
