@@ -376,7 +376,7 @@ class Recommendations(Screen):
             questions = [
 
                 (Constants.Questions['add_friend_question'],
-                 lambda ans: self.handler.add_friend(of=self.logged_in_as, to=answer)
+                 lambda ans: self.handler.add_friend(of=self.logged_in_as, to=user)
                  if ans else None, 'add_friend'),
 
                 (Constants.Questions['exit_question'], lambda _: self, 'quit')
