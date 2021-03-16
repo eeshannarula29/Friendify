@@ -206,7 +206,7 @@ Using this ideology, we then, for a specific user, get access to its vertex in t
 
 ## Todo and Ideas 💡
 
-- [ ] Add a "add friends" feature which lets you type users Id to add them as friend.
+- [x] Add a "add friends" feature which lets you type users Id to add them as friend.
 - [x] customize graph layouts
 - [x] add authentication with password
 - [ ] Friendify network, contaning all the users

@@ -119,13 +119,21 @@ Questions = {
         }
     ],
 
+    'search': [
+        {
+            'type': 'input',
+            'name': 'query',
+            'message': 'Type in the search query: '
+        }
+    ],
+
     'after_sign_in_questions': [
         {
             'type': 'list',
             'name': 'options',
             'message': 'What will you like to do',
             'choices': ['see friend recommendations', 'View your network',
-                        'change your preferences', 'Edit friends',
+                        'change your preferences', 'My friends', 'Search for people',
                         'your profile', 'Delete account', 'Logout']
         }
     ],
@@ -197,6 +205,7 @@ if sys.platform == 'darwin' or sys.platform == 'linux':
                                 'incorrect',
         'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
                     'profile 👨‍💼 or exit 🚪 ',
+        'my_friends': 'select one of your friends to see their profile  👨‍💼',
         'choose_friends': '🙅 select the people you want to un-friend 🙅',
         'no_friends': 'You have no friends 😞, click enter to Exit',
         'NoRec': 'Sorry! there are no good recommendations for you 😞 come back later',
@@ -215,6 +224,7 @@ else:
                                 ' incorrect',
         'profiles': 'These are your friend recommendations, select one of them to see their '
                     'profile or exit',
+        'my_friends': 'select one of your friends to see their profile',
         'choose_friends': 'Select the people you want to un-friend: ',
         'no_friends': 'You have no friends :-(, click enter to Exit',
         'NoRec': 'Sorry! there are no good recommendations for you :-( come back later',

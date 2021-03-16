@@ -214,7 +214,7 @@ class Graph:
 
         Up to <limit> users are returned, starting with the user with the highest similarity score,
         then the second-highest similarity score, etc. Fewer than <limit> users are returned if
-        and only if there aren't enough books that meet the above criteria.
+        and only if there aren't enough users that meet the above criteria.
 
         Preconditions:
             - user in self._vertices
