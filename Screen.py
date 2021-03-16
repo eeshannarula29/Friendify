@@ -207,8 +207,8 @@ class Register(Screen):
             answer = Screen.ask_question_PyInquirer(question).get('options', 'stay')
 
             if answer == 'Try again':
-                password = Screen.ask_question_PyInquirer(Constants.Questions['password_question']) \
-                    .get('password', '')
+                password = Screen.ask_question_PyInquirer(
+                    Constants.Questions['password_question']).get('password', '')
             else:
                 return self.previous_screen
 
@@ -470,7 +470,8 @@ class SearchPeople(Screen):
             if answer in self.handler.get_user_data(self.logged_in_as).get('friends'):
                 options.insert(0, f'Unfriend {answer}')
             else:
-                options.insert(0, f'Friend {answer}')
+                if answer != self.logged_in_as:
+                    options.insert(0, f'Friend {answer}')
 
             Screen.clear_screen()
             Constants.printLogo()
@@ -481,13 +482,13 @@ class SearchPeople(Screen):
                 Constants.generate_question_with_choices(options, ' ')).get('options', ' ')
 
             if sub_answer == 'Exit':
-                return self
+                return self.previous_screen
             elif sub_answer == f'Unfriend {answer}':
                 self.handler.un_friend(self.logged_in_as, answer)
-                return self
+                return self.previous_screen
             elif sub_answer == f'Friend {answer}':
                 self.handler.add_friend(self.logged_in_as, answer)
-                return self
+                return self.previous_screen
 
     def search(self, users: list[str], query: str, limit: int) -> list[str]:
         """ Use merge sort to sort users according to our query
