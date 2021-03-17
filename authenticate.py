@@ -200,43 +200,6 @@ class DataHandler:
             self.db.collection(Constants.collectionName).document(userID).delete()
             self.auth.delete_user(userID)
 
-    def generate_graph_for_user(self, userID: str, depth: int) -> list[dict]:
-        """ Generate data for plotting a graph for al user
-
-        :param userID: the ID of the user
-        :param depth: depth of the network
-        :return: list of dicts contacting data of the graph
-        """
-
-        if depth == 0:
-            return [{'data': {'id': userID, 'label': userID}}]
-        else:
-            data_so_far = [{'data': {'id': userID, 'label': userID}}]
-
-            for friend in self.get_user_data(userID)['friends']:
-                data_so_far.extend(self.generate_graph_for_user(friend, depth - 1))
-                data_so_far.extend([{'data': {'source': userID, 'target': friend}}])
-
-            return data_so_far
-
-    def generate_network(self) -> list[dict]:
-        """ Generate graph for the whole app
-
-        :return: list of dicts contacting data of the graph
-        """
-        data = []
-
-        users = self.get_all_data()
-
-        for user in users:
-            data.append({'data': {'id': user['userID'], 'label': user['userID']}})
-
-        for user in users:
-            for friend in user['friends']:
-                data.append({'data': {'source': user['userID'], 'target': friend}})
-
-        return data
-
     def extract_data_from_csv(self, filepath: str) -> list[dict]:
         """ Extract and format user data for registration in firebase database
 
