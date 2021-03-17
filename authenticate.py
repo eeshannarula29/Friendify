@@ -217,7 +217,7 @@ class DataHandler:
                 for row in reader:
                     row.pop(2)
                     row.pop(0)
-                    data.append(DataHandler.format_row(row))
+                    data.append(self.format_row(row))
 
                 return data
 
