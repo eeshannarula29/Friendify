@@ -103,11 +103,6 @@ Questions = {
             'type': 'input',
             'name': 'userID',
             'message': 'type your username',
-        },
-        {
-            'type': 'password',
-            'name': 'password',
-            'message': 'Type your password'
         }
     ],
 
@@ -201,8 +196,7 @@ if sys.platform == 'darwin' or sys.platform == 'linux':
         'username_taken': "⛔️ The username has already been take",
         'registered_message': "Congratulations 🎉 you registered your self, now sign in with your "
                               "user id to find some friends 👯‍ ",
-        'username_nonexistent': '⛔️ The username you entered is not registered or the password is '
-                                'incorrect',
+        'username_nonexistent': '⛔️ The username you entered is not registered',
         'profiles': 'These are your friend recommendations 👯‍, select one of them to see their '
                     'profile 👨‍💼 or exit 🚪 ',
         'my_friends': 'select one of your friends to see their profile  👨‍💼',
@@ -220,8 +214,7 @@ else:
         'username_taken': "(X) The username has already been take",
         'registered_message': "Congratulations! you registered your self, now sign in with your "
                               "user id to find some friends!",
-        'username_nonexistent': '(X) The username you entered is not registered, or the password is'
-                                ' incorrect',
+        'username_nonexistent': '(X) The username you entered is not registered incorrect',
         'profiles': 'These are your friend recommendations, select one of them to see their '
                     'profile or exit',
         'my_friends': 'select one of your friends to see their profile',

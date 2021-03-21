@@ -195,27 +195,10 @@ class Register(Screen):
 
             return self.previous_screen
 
-        password = Screen.ask_question_PyInquirer(Constants.Questions['password_question']). \
-            get('password', '')
-
-        while len(password) < 6:
-
-            print(Constants.Messages['short_password'])
-
-            question = Constants.generate_question_with_choices(['Try again', 'Exit'], "")
-
-            answer = Screen.ask_question_PyInquirer(question).get('options', 'stay')
-
-            if answer == 'Try again':
-                password = Screen.ask_question_PyInquirer(
-                    Constants.Questions['password_question']).get('password', '')
-            else:
-                return self.previous_screen
-
         answers = Screen.ask_multi_choice_question_cutie(Constants.Messages['header_message'],
                                                          Constants.ProfileQuestions)
 
-        self.handler.register(self.logged_in_as, password, answers)
+        self.handler.register(self.logged_in_as, answers)
 
         return SignedIn(self.handler, self.previous_screen, self.logged_in_as)
 
@@ -230,9 +213,8 @@ class SignIn(Screen):
         credentials = Screen.ask_question_PyInquirer(Constants.Questions['sign_in_questions'])
 
         self.logged_in_as = credentials.get('userID')
-        password = credentials.get('password')
 
-        while not self.handler.sign_in(self.logged_in_as, password):
+        while not self.handler.sign_in(self.logged_in_as):
             print(Constants.Messages['username_nonexistent'])
 
             question = Constants.generate_question_with_choices(['Exit'], "")

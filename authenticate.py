@@ -1,7 +1,3 @@
-import pyrebase
-import requests
-
-from firebase_admin import auth
 from firebase_admin.exceptions import FirebaseError
 
 import firebase_admin
@@ -17,45 +13,6 @@ import csv
 from typing import Optional
 
 
-class Auth:
-
-    def __init__(self) -> None:
-        self.app = pyrebase.initialize_app(Constants.PyrebaseConfig)
-        self.auth = self.app.auth()
-
-    def create_user(self, userID: str, password: str) -> bool:
-        try:
-            auth.create_user(uid=userID, email=userID + '@friendify.com', password=password)
-            return True
-        except (ValueError, FirebaseError):
-            return False
-
-    def signed_in(self, userID: str, password: str) -> bool:
-        try:
-            self.auth.sign_in_with_email_and_password(userID + '@friendify.com', password)
-            return True
-        except requests.exceptions.HTTPError:
-            return False
-
-    def is_user(self, userID: str) -> bool:
-        try:
-            auth.get_user(userID)
-            return True
-        except (ValueError, auth.UserNotFoundError):
-            return False
-        except FirebaseError:
-            raise DataDidNotLoadError
-
-    def delete_user(self, userID: str) -> bool:
-        try:
-            auth.delete_user(userID)
-            return True
-        except ValueError:
-            return False
-        except FirebaseError:
-            raise DataDidNotLoadError
-
-
 class DataHandler:
 
     def __init__(self) -> None:
@@ -64,38 +21,31 @@ class DataHandler:
 
         self.db = firestore.client()
 
-        self.auth = Auth()
-
-    def register(self, userID: str, password: str, user_data: dict) -> bool:
+    def register(self, userID: str, user_data: dict) -> bool:
         """ register a user to our app
 
-        :param password: user's password
         :param userID: The user ID of the person
         :param user_data: the data of the user
         """
-        if not self.auth.is_user(userID):
+        if not self.is_user(userID):
 
             user_data['userID'] = userID
             user_data['friends'] = []
 
-            if self.auth.create_user(userID, password):
-
-                try:
-                    self.db.collection(Constants.collectionName).document(userID).set(user_data)
-                    return True
-                except (ValueError, TypeError, FirebaseError):
-                    self.auth.delete_user(userID)
-                    raise DataDidNotLoadError
+            try:
+                self.db.collection(Constants.collectionName).document(userID).set(user_data)
+                return True
+            except (ValueError, TypeError, FirebaseError):
+                raise DataDidNotLoadError
 
         return False
 
-    def sign_in(self, userID: str, password: str) -> bool:
+    def sign_in(self, userID: str) -> bool:
         """ Sign in to the app, and return weather the sure successfully signed in
 
         :param userID: Id of the user
-        :param password: password of the user
         """
-        return self.auth.signed_in(userID, password)
+        return self.is_user(userID)
 
     def get_user_data(self, userID: str) -> dict:
         """Return data for a user
@@ -151,7 +101,16 @@ class DataHandler:
 
         :param userID: The user ID of the person
         """
-        return self.auth.is_user(userID)
+        try:
+            user = self.db.collection(Constants.collectionName).document(userID).get()
+
+            if user.exists:
+                return True
+            else:
+                return False
+
+        except FirebaseError:
+            return False
 
     def add_friend(self, of: str, to: str) -> None:
         """ Add friend to a user
@@ -198,7 +157,6 @@ class DataHandler:
                 self.un_friend(by=userID, to=friend)
 
             self.db.collection(Constants.collectionName).document(userID).delete()
-            self.auth.delete_user(userID)
 
     def extract_data_from_csv(self, filepath: str) -> list[dict]:
         """ Extract and format user data for registration in firebase database
@@ -247,7 +205,7 @@ class DataHandler:
         data = self.extract_data_from_csv(filename)
 
         for user in data:
-            self.register(user['userID'], 'admin123456', user)
+            self.register(user['userID'], user)
 
 
 # The code below is used to register all the people from the survey we conducted:
