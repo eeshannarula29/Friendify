@@ -20,7 +20,7 @@ $ git clone https://github.com/eeshannarula29/Friendify.git
 ```
 Install the required libraries:
 ```shell
-$ pip3 install firebase_admin
+$ pip3 install firebase-admin
 $ pip3 install PyInquirer
 $ pip3 install cutie
 $ pip3 install dash
