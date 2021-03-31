@@ -24,7 +24,7 @@ $ pip3 install firebase_admin
 $ pip3 install PyInquirer
 $ pip3 install cutie
 $ pip3 install dash
-$ pip3 install dash_cytoscape 
+$ pip3 install dash-cytoscape 
 $ pip3 install pyfiglet
 ```
 After cloning the project or downloading it you just have to run this command in the cloned or downloaded directory, in your computer command-line interpreter (cmd/terminal)
