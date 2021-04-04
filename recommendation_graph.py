@@ -1,10 +1,7 @@
+"""File contains Recommendation graph class"""
 from __future__ import annotations
 
-from authenticate import DataHandler
-import Constants
-
 from typing import Any
-
 from random import choice
 
 import logging
@@ -15,6 +12,9 @@ import dash_html_components as html
 import dash_cytoscape as cyto
 import dash_core_components as dcc
 from dash.dependencies import Input, Output
+
+from authenticate import DataHandler
+import constants
 
 
 class _Vertex:
@@ -229,7 +229,7 @@ class Graph:
 
             other_vertex = self._vertices[vertex]
 
-            if other_vertex.kind == 'user' and\
+            if other_vertex.kind == 'user' and \
                     vertex != user and \
                     other_vertex not in user_vertex.neighbours:
 
@@ -240,8 +240,8 @@ class Graph:
 
         users.sort(reverse=True)
 
-        return [user_data[1] + f' ({round(user_data[0] * 100)}% match)' for user_data in users][
-               :limit]
+        return [user_data[1] + f' ({round(user_data[0] * 100)}% match)'
+                for user_data in users][:limit]
 
     def generate_users_graph_for_user(self, user: str, d: int) -> Graph:
         """ Return a graph of a users and their friends until depth d
@@ -249,22 +249,22 @@ class Graph:
         :param user: the user ID of the user
         :param d: the depth
         """
-        if user in self._vertices:
-            vertices = self._vertices[user].generate_graph(d, set())
-
-            graph = Graph()
-
-            for vertex in vertices:
-                graph.add_vertex(vertex.item, vertex.kind)
-
-            for vertex in vertices:
-                for neighbour in vertex.neighbours:
-                    if neighbour.item in graph._vertices:
-                        graph.add_edge(vertex.item, neighbour.item)
-
-            return graph
-        else:
+        if user not in self._vertices:
             raise ValueError
+
+        vertices = self._vertices[user].generate_graph(d, set())
+
+        graph = Graph()
+
+        for vertex in vertices:
+            graph.add_vertex(vertex.item, vertex.kind)
+
+        for vertex in vertices:
+            for neighbour in vertex.neighbours:
+                if neighbour.item in graph._vertices:
+                    graph.add_edge(vertex.item, neighbour.item)
+
+        return graph
 
     def format_for_graph(self) -> list[dict]:
         """ Return formatted data for visualization
@@ -284,7 +284,7 @@ class Graph:
 
         @app.callback(Output('cytoscape', 'layout'),
                       Input('dropdown', 'value'))
-        def update_layout(layout) -> dict:
+        def update_layout(layout: Any) -> dict:
             return {
                 'name': layout,
                 'animate': True
@@ -318,17 +318,13 @@ class Graph:
         """Return a friend recommendation graph from firebase could data using a handler
 
         The friend recommendation graph stores one vertex for each user and preference in the
-        firebase data.
-        
-        Each vertex stores as its item either a user ID or a preference.
-
-        Edges represent a liking of a preference by a user.
+        firebase data. Each vertex stores as its item either a user ID or a preference. Edges
+        represent a liking of a preference by a user.
         """
-
         graph = Graph()
 
-        for category in Constants.Categories:
-            for preference in Constants.Categories[category]:
+        for category in constants.CATEGORIES:
+            for preference in constants.CATEGORIES[category]:
                 graph.add_vertex(preference, 'preference')
 
         users = handler.get_all_data()
@@ -354,3 +350,24 @@ class Graph:
                 graph.add_edge(user['userID'], friend)
 
         return graph
+
+
+if __name__ == '__main__':
+    import python_ta
+
+    python_ta.check_all(config={
+        'extra-imports': ['authenticate',
+                          'constants',
+                          'typing',
+                          'random',
+                          'logging',
+                          'webbrowser',
+                          'dash',
+                          'dash_html_components',
+                          'dash_cytoscape',
+                          'dash_core_components',
+                          'dash.dependencies'],
+        'allowed-io': [],
+        'max-line-length': 100,
+        'disable': ['E1136']
+    })

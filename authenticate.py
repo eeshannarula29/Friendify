@@ -1,59 +1,63 @@
+"""The file contains DataHandler object used to handle data"""
+
+import csv
+from typing import Optional
+
 from firebase_admin.exceptions import FirebaseError
 
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-from CustomExceptions import DataDidNotLoadError, UserDoesNotExistsError, UserExitsError
-
-import Constants
-
-import csv
-
-from typing import Optional
+from custom_exceptions import DataDidNotLoadError, UserDoesNotExistsError
+import constants
 
 
 class DataHandler:
+    """Object to handle data"""
+    cred: credentials.Certificate
+    app: firebase_admin.App
+    db: firebase_admin.firestore.client
 
     def __init__(self) -> None:
-        self.cred = credentials.Certificate(Constants.keysFile)
+        self.cred = credentials.Certificate(constants.KEYS)
         self.app = firebase_admin.initialize_app(self.cred)
 
         self.db = firestore.client()
 
-    def register(self, userID: str, user_data: dict) -> bool:
+    def register(self, user_id: str, user_data: dict) -> bool:
         """ register a user to our app
 
-        :param userID: The user ID of the person
+        :param user_id: The user ID of the person
         :param user_data: the data of the user
         """
-        if not self.is_user(userID):
+        if not self.is_user(user_id):
 
-            user_data['userID'] = userID
+            user_data['userID'] = user_id
             user_data['friends'] = []
 
             try:
-                self.db.collection(Constants.collectionName).document(userID).set(user_data)
+                self.db.collection(constants.COLLECTION).document(user_id).set(user_data)
                 return True
             except (ValueError, TypeError, FirebaseError):
                 raise DataDidNotLoadError
 
         return False
 
-    def sign_in(self, userID: str) -> bool:
+    def sign_in(self, user_id: str) -> bool:
         """ Sign in to the app, and return weather the sure successfully signed in
 
-        :param userID: Id of the user
+        :param user_id: Id of the user
         """
-        return self.is_user(userID)
+        return self.is_user(user_id)
 
-    def get_user_data(self, userID: str) -> dict:
+    def get_user_data(self, user_id: str) -> dict:
         """Return data for a user
 
-        :param userID: The user ID of the person
+        :param user_id: The user ID of the person
         """
         try:
-            user = self.db.collection(Constants.collectionName).document(userID).get()
+            user = self.db.collection(constants.COLLECTION).document(user_id).get()
 
             if user.exists:
                 return user.to_dict()
@@ -63,21 +67,22 @@ class DataHandler:
         except FirebaseError:
             raise DataDidNotLoadError
 
-    def update_user_data(self, userID: str, user_data: dict) -> bool:
+    def update_user_data(self, user_id: str, user_data: dict) -> bool:
         """ Update the data of a user
 
-        :param userID: The user ID of the person
+        :param user_id: The user ID of the person
         :param user_data: the data of the user
         """
-        if self.is_user(userID):
+        if self.is_user(user_id):
             try:
-                self.db.collection(Constants.collectionName).document(userID).set(user_data,
-                                                                                  merge=True)
+                self.db.collection(constants.COLLECTION).document(user_id).set(user_data,
+                                                                               merge=True)
                 return True
             except (ValueError, TypeError):
                 return False
             except FirebaseError:
                 raise DataDidNotLoadError
+        return False
 
     def get_all_data(self) -> Optional[list[dict]]:
         """Return all the users data in the firebase database
@@ -85,7 +90,7 @@ class DataHandler:
         data = []
 
         try:
-            entries = self.db.collection(Constants.collectionName).get()
+            entries = self.db.collection(constants.COLLECTION).get()
 
             for entry in entries:
                 if entry.exists:
@@ -96,13 +101,13 @@ class DataHandler:
 
         return data
 
-    def is_user(self, userID: str) -> bool:
+    def is_user(self, user_id: str) -> bool:
         """ Return whether the user in in the database
 
-        :param userID: The user ID of the person
+        :param user_id: The user ID of the person
         """
         try:
-            user = self.db.collection(Constants.collectionName).document(userID).get()
+            user = self.db.collection(constants.COLLECTION).document(user_id).get()
 
             if user.exists:
                 return True
@@ -144,21 +149,22 @@ class DataHandler:
             self.update_user_data(by, by_data)
             self.update_user_data(to, to_data)
 
-    def delete_user(self, userID: str) -> None:
+    def delete_user(self, user_id: str) -> None:
         """ Delete the user if it exists
 
-        :param userID: Id of the user
+        :param user_id: Id of the user
         """
-        if self.is_user(userID):
+        if self.is_user(user_id):
 
-            user_data = self.get_user_data(userID)
+            user_data = self.get_user_data(user_id)
 
             for friend in user_data['friends']:
-                self.un_friend(by=userID, to=friend)
+                self.un_friend(by=user_id, to=friend)
 
-            self.db.collection(Constants.collectionName).document(userID).delete()
+            self.db.collection(constants.COLLECTION).document(user_id).delete()
 
-    def extract_data_from_csv(self, filepath: str) -> list[dict]:
+    @staticmethod
+    def extract_data_from_csv(filepath: str) -> list[dict]:
         """ Extract and format user data for registration in firebase database
 
         :param filepath: name of the file containing the data
@@ -175,14 +181,15 @@ class DataHandler:
                 for row in reader:
                     row.pop(2)
                     row.pop(0)
-                    data.append(self.format_row(row))
+                    data.append(DataHandler.format_row(row))
 
                 return data
 
         except FileNotFoundError:
             print('File does not exist')
 
-    def format_row(self, row: list) -> dict:
+    @staticmethod
+    def format_row(row: list) -> dict:
         """ Format a row of the csv file, from extract_data_from_csv function
         """
 
@@ -202,17 +209,29 @@ class DataHandler:
         :param filename: name of the file containing the data
         """
 
-        data = self.extract_data_from_csv(filename)
+        data = DataHandler.extract_data_from_csv(filename)
 
         for user in data:
             self.register(user['userID'], user)
 
 
-# The code below is used to register all the people from the survey we conducted:
-# This code is not meant to be run
+if __name__ == '__main__':
+    # The code below is used to register all the people from the survey we conducted:
+    # This code is not meant to be run
 
+    #     data_handler = DataHandler()
+    #     data_handler.add_users_from_csv(Constants.DATA)
 
-# if __name__ == '__main__':
-#     data_handler = DataHandler()
-#     data_handler.add_users_from_csv(Constants.DataFile)
+    import python_ta
 
+    python_ta.check_all(config={
+        'extra-imports': ['csv',
+                          'typing',
+                          'firebase_admin',
+                          'firebase_admin.exceptions',
+                          'custom_exceptions',
+                          'constants'],
+        'allowed-io': ['extract_data_from_csv'],
+        'max-line-length': 100,
+        'disable': ['E1136']
+    })
