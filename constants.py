@@ -1,21 +1,21 @@
-import pyfiglet
+"""Contains all the constants"""
+
 import sys
+import pyfiglet
 
-collectionName: str = "data"
-keysFile: str = "keys.json"
-aboutUs: str = "AboutUs.txt"
+COLLECTION = "data"
+KEYS = "keys.json"
+ABOUTUS = "AboutUs.txt"
 
-QuestionsLimit: int = 3
+QUESTIONSLIMIT = 3
 
-MinimumSimilarityScore = 2
+DEPTH = 2
 
-Depth = 2
+DATA = 'data/Survey.csv'
 
-DataFile = 'data/Survey.csv'
+THANKYOU = "Thank you for using Friendify 🙏 😀"
 
-thankyou_message = "Thank you for using Friendify 🙏 😀"
-
-Categories = {
+CATEGORIES = {
 
     'movies': [
         'action',
@@ -79,7 +79,7 @@ Categories = {
 
 }
 
-Questions = {
+QUESTIONS = {
 
     'log_questions': [
         {
@@ -93,7 +93,7 @@ Questions = {
     'UserID_question': [
         {
             'type': 'input',
-            'name': 'userID',
+            'name': 'user_id',
             'message': 'type a username',
         }
     ],
@@ -101,7 +101,7 @@ Questions = {
     'sign_in_questions': [
         {
             'type': 'input',
-            'name': 'userID',
+            'name': 'user_id',
             'message': 'type your username',
         }
     ],
@@ -190,7 +190,7 @@ Questions = {
 
 if sys.platform == 'darwin' or sys.platform == 'linux':
 
-    Messages = {
+    MESSAGES = {
         'header_message': '⬆️ for up ⬇️ for down 🚀 space to select ⏯ enter to confirm your '
                           'selections ',
         'username_taken': "⛔️ The username has already been take",
@@ -208,7 +208,7 @@ if sys.platform == 'darwin' or sys.platform == 'linux':
     }
 
 else:
-    Messages = {
+    MESSAGES = {
         'header_message': '(use arrow keys to move up and down, space bar to select and deselect,'
                           ' and enter to confirm your selections)',
         'username_taken': "(X) The username has already been take",
@@ -225,7 +225,7 @@ else:
         'short_password': 'The password you typed is shorter than 6 characters'
     }
 
-logo = """
+LOGO = """
    ******************************************************************
    *                                                                *
    *                            Friendify👯‍                         *
@@ -233,31 +233,32 @@ logo = """
    ******************************************************************
     """
 
-ProfileQuestions = [
+PROFILEQUESTIONS = [
     {
         'header': 'movies',
-        'message': Questions['movie_question'],
-        'options': Categories['movies']
+        'message': QUESTIONS['movie_question'],
+        'options': CATEGORIES['movies']
     },
     {
         'header': 'music',
-        'message': Questions['music_question'],
-        'options': Categories['music']
+        'message': QUESTIONS['music_question'],
+        'options': CATEGORIES['music']
     },
     {
         'header': 'games',
-        'message': Questions['game_question'],
-        'options': Categories['games']
+        'message': QUESTIONS['game_question'],
+        'options': CATEGORIES['games']
     },
     {
         'header': 'food',
-        'message': Questions['food_question'],
-        'options': Categories['food']
+        'message': QUESTIONS['food_question'],
+        'options': CATEGORIES['food']
     }
 ]
 
 
-def profile(data) -> str:
+def profile(data: dict) -> str:
+    """Return string representation of a profile"""
     string_so_far = f'Username: {data["userID"]} \n \n'
     if 'movies' in data:
         string_so_far += 'Favourite Movie categories: ' + ', '.join(data['movies']) + '\n \n'
@@ -273,7 +274,8 @@ def profile(data) -> str:
     return string_so_far
 
 
-def generate_question_with_choices(choices: list[str], message: str):
+def generate_question_with_choices(choices: list[str], message: str) -> list[dict]:
+    """Generate a question multiple choice single select"""
     return [
         {
             'type': 'list',
@@ -284,7 +286,8 @@ def generate_question_with_choices(choices: list[str], message: str):
     ]
 
 
-def generate_question_multiple_choice(choices: list[dict], message: str):
+def generate_question_multi_choice(choices: list[dict], message: str) -> list[dict]:
+    """Generate a question multiple choice multiple select"""
     return [
         {
             'type': 'checkbox',
@@ -295,12 +298,14 @@ def generate_question_multiple_choice(choices: list[dict], message: str):
     ]
 
 
-def printLogo() -> None:
+def print_logo() -> None:
+    """print the logo"""
     custom_fig = pyfiglet.figlet_format('Friendify 👯‍')
     print(custom_fig)
 
 
 def change_depth(answer: object) -> int:
+    """change the depth variable to visualize friends until that depth"""
     choices = ['See only your friends', 'See your friends and their friends',
                "See your friends, their friends, and your friends' friends' friends"]
 
@@ -310,7 +315,7 @@ def change_depth(answer: object) -> int:
         return -1
 
 
-PyrebaseConfig = {
+PYREBASECONFIG = {
     'apiKey': "AIzaSyDksNZ5vwpXXRIIE43UrwuzQ5vxQixKeZo",
     'authDomain': "friendify-6a10b.firebaseapp.com",
     'projectId': "friendify-6a10b",
@@ -319,3 +324,14 @@ PyrebaseConfig = {
     'appId': "1:866913733149:web:144bf6a91b9bf8d13494f4",
     'databaseURL': 'friendify-6a10b.appspot.com'
 }
+
+if __name__ == '__main__':
+    import python_ta
+
+    python_ta.check_all(config={
+        'extra-imports': ['sys',
+                          'pyfiglet'],  # the names (strs) of imported modules
+        'allowed-io': ['print_logo'],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['E1136']
+    })
