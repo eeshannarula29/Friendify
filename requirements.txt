@@ -4,4 +4,5 @@ cutie
 pyfiglet
 dash
 dash-cytoscape
+prompt_toolkit==1.0.14
 
