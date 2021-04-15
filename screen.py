@@ -130,7 +130,7 @@ class DocumentationScreen(Screen):
     custom_questions: Optional[list[(list[dir], Any)]]
 
     def add_details(self, document_path_or_string: str, is_path: Optional[bool] = True,
-                    custom_questions: Optional[list[(list[dir], Any)]] = None) -> None:
+                    custom_questions: Optional[list[tuple[list[dir], Any]]] = None) -> None:
         """Add details of the document, kind of like content of the document"""
         self.document_path_or_string = document_path_or_string
         self.is_path = is_path
