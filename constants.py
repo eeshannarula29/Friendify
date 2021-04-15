@@ -225,14 +225,6 @@ else:
         'short_password': 'The password you typed is shorter than 6 characters'
     }
 
-LOGO = """
-   ******************************************************************
-   *                                                                *
-   *                            Friendify👯‍                         *
-   *                                                                *
-   ******************************************************************
-    """
-
 PROFILEQUESTIONS = [
     {
         'header': 'movies',
@@ -258,7 +250,10 @@ PROFILEQUESTIONS = [
 
 
 def profile(data: dict) -> str:
-    """Return string representation of a profile"""
+    """Return string representation of a profile
+
+    :param data: data of a user as retrieved from firebase database
+    """
     string_so_far = f'Username: {data["userID"]} \n \n'
     if 'movies' in data:
         string_so_far += 'Favourite Movie categories: ' + ', '.join(data['movies']) + '\n \n'
@@ -275,7 +270,12 @@ def profile(data: dict) -> str:
 
 
 def generate_question_with_choices(choices: list[str], message: str) -> list[dict]:
-    """Generate a question multiple choice single select"""
+    """Generate a multiple choice single select question with <choices> and <message> and return it
+    in py-inquirer format
+
+    :param choices: choices of the question
+    :param message: message of the question
+    """
     return [
         {
             'type': 'list',
@@ -287,7 +287,12 @@ def generate_question_with_choices(choices: list[str], message: str) -> list[dic
 
 
 def generate_question_multi_choice(choices: list[dict], message: str) -> list[dict]:
-    """Generate a question multiple choice multiple select"""
+    """Generate a multiple choice multiple select question with <choices> and <message> and
+    return it in py-inquirer format
+
+    :param choices: choices of the question
+    :param message: message of the question
+    """
     return [
         {
             'type': 'checkbox',
@@ -305,7 +310,10 @@ def print_logo() -> None:
 
 
 def change_depth(answer: object) -> int:
-    """change the depth variable to visualize friends until that depth"""
+    """change the depth variable to visualize friends until that depth
+
+    This is a helper function for plot function in Graph class in recommendation_graph.py
+    """
     choices = ['See only your friends', 'See your friends and their friends',
                "See your friends, their friends, and your friends' friends' friends"]
 
@@ -314,16 +322,6 @@ def change_depth(answer: object) -> int:
     else:
         return -1
 
-
-PYREBASECONFIG = {
-    'apiKey': "AIzaSyDksNZ5vwpXXRIIE43UrwuzQ5vxQixKeZo",
-    'authDomain': "friendify-6a10b.firebaseapp.com",
-    'projectId': "friendify-6a10b",
-    'storageBucket': "friendify-6a10b.appspot.com",
-    'messagingSenderId': "866913733149",
-    'appId': "1:866913733149:web:144bf6a91b9bf8d13494f4",
-    'databaseURL': 'friendify-6a10b.appspot.com'
-}
 
 if __name__ == '__main__':
     import python_ta

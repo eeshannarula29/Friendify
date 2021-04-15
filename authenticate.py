@@ -14,7 +14,13 @@ import constants
 
 
 class DataHandler:
-    """Object to handle data"""
+    """Object to handle data
+
+    InstanceAttributes:
+    - cred: a certificate used to connect to the firebase server
+    - app: an object representing the firebase server
+    - db: an object representing firebase firestore database
+    """
     cred: credentials.Certificate
     app: firebase_admin.App
     db: firebase_admin.firestore.client
@@ -30,6 +36,7 @@ class DataHandler:
 
         :param user_id: The user ID of the person
         :param user_data: the data of the user
+        :return: whether the process was successful
         """
         if not self.is_user(user_id):
 
@@ -48,11 +55,12 @@ class DataHandler:
         """ Sign in to the app, and return weather the sure successfully signed in
 
         :param user_id: Id of the user
+        :return: whether the process was successful
         """
         return self.is_user(user_id)
 
     def get_user_data(self, user_id: str) -> dict:
-        """Return data for a user
+        """Return data for a user as a dictionary
 
         :param user_id: The user ID of the person
         """
@@ -72,6 +80,7 @@ class DataHandler:
 
         :param user_id: The user ID of the person
         :param user_data: the data of the user
+        :return: whether the process was successful
         """
         if self.is_user(user_id):
             try:
@@ -122,6 +131,10 @@ class DataHandler:
 
         :param of: the user who is adding friend
         :param to: the user who is added friend
+
+        Precondition:
+        - <of> is a valid user id
+        - <to> is a valid user id
         """
         of_data = self.get_user_data(of)
         to_data = self.get_user_data(to)
@@ -138,6 +151,10 @@ class DataHandler:
 
         :param by: Id of the user who is un friending
         :param to: Id of the user who is getting un friended
+
+        Precondition:
+        - <by> is a valid user id
+        - <to> is a valid user id
         """
         by_data = self.get_user_data(by)
         to_data = self.get_user_data(to)
@@ -190,7 +207,10 @@ class DataHandler:
 
     @staticmethod
     def format_row(row: list) -> dict:
-        """ Format a row of the csv file, from extract_data_from_csv function
+        """ Format a row of the csv file,
+        this is a helper function for extract_data_from_csv function
+
+        :param row: row of the csv file
         """
 
         return {
@@ -207,6 +227,9 @@ class DataHandler:
         """register all the users in the csv file to our app
 
         :param filename: name of the file containing the data
+
+        Precondition:
+        - filename is a valid path to the dataset
         """
 
         data = DataHandler.extract_data_from_csv(filename)

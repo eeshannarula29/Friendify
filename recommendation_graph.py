@@ -78,6 +78,9 @@ class _Vertex:
 
         :param visited: the set of already visited vertices
         :param d: the depth
+
+        Precondition:
+        - d >= 0
         """
         if d == 0:
             visited.add(self)
@@ -93,6 +96,8 @@ class _Vertex:
 
     def format_for_graph(self, visited: set[_Vertex]) -> list[dict]:
         """ Return formatted data for visualization
+
+        the formatting is done for the dash library to plot a graph
 
         :param visited: a set of already visited vertices
         """

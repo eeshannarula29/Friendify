@@ -24,7 +24,12 @@ class Screen:
 
     def __init__(self, data_handler: DataHandler, previous_screen: Optional[Screen] = None,
                  userID: Optional[str] = None) -> None:
+        """Initialize a screen
 
+        :param data_handler: A data handler object used to handle the data management
+        :param previous_screen: the parent screen of self
+        :param userID: The unique user id of a user
+        """
         self.handler = data_handler
         self.previous_screen = previous_screen
 
@@ -62,7 +67,11 @@ class Screen:
 
     @staticmethod
     def ask_question_py_inquirer(questions: list[dict]) -> Optional[dict]:
-        """Use py-inquirer to ask questions in the terminal"""
+        """Use py-inquirer to ask questions in the terminal
+
+        :param questions: A list of questions, where each question is a dictionary
+        formatted for py-inquirer to read.
+        """
         try:
             return prompt(questions)
         except Exception:
@@ -71,7 +80,12 @@ class Screen:
     @staticmethod
     def ask_multi_choice_question_cutie(header_message: str,
                                         questions: list[dict]) -> dict[str, list[str]]:
-        """Use cutie to ask questions in the terminal"""
+        """Use cutie to ask questions in the terminal
+
+        :param header_message: a message about the question asked
+        :param questions: a list of multi choice questions formatted for cut library
+        :return: a dictionary with question mapped to its answers
+        """
         answers = {}
 
         for question in questions:
@@ -97,7 +111,11 @@ class HomeScreen(Screen):
     """Represents the home screen"""
 
     def show(self, clear_screen_before_present: bool = True) -> Optional[Screen]:
+        """Present the screen onto the terminal and return the next screen to be presented
 
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         if clear_screen_before_present:
             Screen.clear_screen()
 
@@ -124,20 +142,38 @@ class HomeScreen(Screen):
 
 
 class DocumentationScreen(Screen):
-    """Represents a Documentation Screen, used to read documents and text"""
+    """Represents a Documentation Screen, used to read documents and text
+
+    InstanceAttributes(additional from super class):
+    -
+    - is_path: whether the attribute <document_path_or_string> is a path or a string contain
+     the document
+    - custom_questions: a list of questions to ask after presenting the document
+    """
     document_path_or_string: str
     is_path: bool
     custom_questions: Optional[list[(list[dir], Any)]]
 
     def add_details(self, document_path_or_string: str, is_path: Optional[bool] = True,
                     custom_questions: Optional[list[tuple[list[dir], Any]]] = None) -> None:
-        """Add details of the document, kind of like content of the document"""
+        """Add details of the document, that is the content of the document
+
+        :param document_path_or_string: document_path_or_string: the path to the document or the
+        string containing the document
+        :param is_path: whether the attribute <document_path_or_string> is a path or a string
+        contain the document
+        :param custom_questions: a list of questions to ask after presenting the document
+        """
         self.document_path_or_string = document_path_or_string
         self.is_path = is_path
         self.custom_questions = custom_questions
 
     def show(self, clear_screen_before_present: bool = True) -> Optional[Screen]:
+        """Present the screen onto the terminal and return the next screen to be presented
 
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         if clear_screen_before_present:
             Screen.clear_screen()
 
@@ -172,7 +208,11 @@ class SignInUp(Screen):
     """Represents a sign in / up choosing screen"""
 
     def show(self, clear_screen_before_present: bool = True) -> Optional[Screen]:
+        """Present the screen onto the terminal and return the next screen to be presented
 
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         if clear_screen_before_present:
             Screen.clear_screen()
 
@@ -197,6 +237,11 @@ class Register(Screen):
     """Represents a registration screen"""
 
     def show(self, clear_screen_before_present: bool = True) -> Screen:
+        """Present the screen onto the terminal and return the next screen to be presented
+
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         show_logo = Screen.clear_screen() if clear_screen_before_present else False
 
         if show_logo:
@@ -226,6 +271,11 @@ class SignIn(Screen):
     """Represents a sign in screen"""
 
     def show(self, clear_screen_before_present: bool = True) -> Screen:
+        """Present the screen onto the terminal and return the next screen to be presented
+
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         show_logo = Screen.clear_screen() if clear_screen_before_present else False
 
         if show_logo:
@@ -251,7 +301,10 @@ class SignedIn(Screen):
     """Represents a signed in home screen"""
 
     def show_start(self, clear_screen: bool) -> None:
-        """Print the logo and starting of app"""
+        """Print the logo and starting of app
+
+        this is a helper function for self.show
+        """
         if clear_screen:
             Screen.clear_screen()
 
@@ -261,7 +314,11 @@ class SignedIn(Screen):
         Screen.print_space(1)
 
     def show(self, clear_screen_before_present: bool = True) -> Optional[Screen]:
+        """Present the screen onto the terminal and return the next screen to be presented
 
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         self.show_start(clear_screen_before_present)
 
         answer = Screen.ask_question_py_inquirer(
@@ -357,7 +414,11 @@ class Recommendations(Screen):
     """Represents a friends Recommendation screen"""
 
     def show(self, clear_screen_before_present: bool = True) -> Screen:
+        """Present the screen onto the terminal and return the next screen to be presented
 
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         if clear_screen_before_present:
             Screen.clear_screen()
 
@@ -413,7 +474,11 @@ class MyFriends(Screen):
     """Represents a list of user friends screen"""
 
     def show(self, clear_screen_before_present: bool = True) -> Screen:
+        """Present the screen onto the terminal and return the next screen to be presented
 
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         if clear_screen_before_present:
             Screen.clear_screen()
 
@@ -468,7 +533,11 @@ class SearchPeople(Screen):
     """Represents a searching screen"""
 
     def show(self, clear_screen_before_present: bool = True) -> Optional[Screen]:
+        """Present the screen onto the terminal and return the next screen to be presented
 
+        :param clear_screen_before_present: whether to clear the screen
+        :return: the next screen to be presented to the terminal
+        """
         if clear_screen_before_present:
             Screen.clear_screen()
 
