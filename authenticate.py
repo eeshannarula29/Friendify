@@ -1,4 +1,7 @@
-"""The file contains DataHandler object used to handle data"""
+"""The file contains DataHandler object used to handle data
+
+By Eeshan Narula and Avnish Pasari
+"""
 
 import csv
 from typing import Optional

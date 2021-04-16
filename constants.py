@@ -1,4 +1,7 @@
-"""Contains all the constants"""
+"""Contains all the constants
+
+By Eeshan Narula and Avnish Pasari
+"""
 
 import sys
 import pyfiglet

@@ -1,4 +1,7 @@
-"""The file contains the screen object, which handles the UI"""
+"""The file contains the screen object, which handles the UI
+
+By Eeshan Narula and Avnish Pasari
+"""
 
 from __future__ import annotations
 

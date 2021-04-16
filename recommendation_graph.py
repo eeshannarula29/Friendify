@@ -1,4 +1,7 @@
-"""File contains Recommendation graph class"""
+"""File contains Recommendation graph class
+
+By Eeshan Narula and Avnish Pasari
+"""
 from __future__ import annotations
 
 from typing import Any
@@ -32,6 +35,12 @@ class _Vertex:
         - self not in self.neighbours
         - all(self in u.neighbours for u in self.neighbours)
         - self.kind in {'user', 'preference'}
+
+    The base class was take from the A3 with the following methods:
+    - degree (same)
+    - similarity_score (modified)
+
+    All the other methods are written by us
         """
 
     item: Any
@@ -116,6 +125,16 @@ class _Vertex:
 
 class Graph:
     """A graph used to represent a friend recommendation network.
+
+    The base class is taken from A3 with the following methods:
+    - add_vertex (same)
+    - add_edge(same)
+    - adjacent(same)
+    - get_neighbours(same)
+    - get_all_vertices(same)
+    - get_similarity_score(same)
+
+    All the other methods are written by us
     """
     # Private Instance Attributes:
     #     - _vertices:

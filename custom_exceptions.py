@@ -1,4 +1,7 @@
-"""The file contains all the custom exceptions used by the app"""
+"""The file contains all the custom exceptions used by the app
+
+By Eeshan Narula and Avnish Pasari
+"""
 
 
 class UserExitsError(Exception):

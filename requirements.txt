@@ -1,8 +1,17 @@
+# Requirements for the app:
+
+# Firebase
 firebase-admin
+
+# Prompt UI
 PyInquirer
 cutie
 pyfiglet
-dash
-dash-cytoscape
 prompt_toolkit==1.0.14
 
+# Plotting
+dash
+dash-cytoscape
+
+# Code check
+python-ta
