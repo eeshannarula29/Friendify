@@ -1,17 +1,33 @@
 # About Us
 
-The onset of COVID-19 has made it extremely hard for people to socialize and make new friends.
-The constant quarantine and not being able to meet people, visit restaurants, go to clubs or attend social events hasled to an increased social isolation amongst people.
-This increased social isolation amongst people, has negatively impacted the mental health and development of individuals.  
-
-To tackle this problem we made an app, which helps people make friends, while still sitting at their home.
-Friendify is an app used to make friends in these hard times when
-it is so difficult to do so. Friendify takes into note the interests
-of the user, and find people with the common interests.
-
-The app takes into consideration the movies, food, music and games the
-user likes for the process. User can then add friends, according to the recommendations, or through traditional search and edit them
-afterwards. They can even visualize their friends, their friends' friends and so on as a network.
+The onset of COVID-19 has made it extremely hard for people to socialize and make
+new friends.
+The constant quarantine and not being able to meet people, visit restaurants, go to
+clubs or attend social events has led to an increased social isolation amongst people.
+This increased social isolation amongst people, if not addressed, can negatively impact
+the mental health and development of the concerned individual. 
+Studies have shown that loneliness is often associated with negative thoughts (cognition).
+Moreover, anxiety and depression may cause social withdrawal which exacerbates
+the loneliness and isolation associated with social distancing. 
+Most humans, by nature, are social creatures. Over the past few months - repeated
+lock-downs, bans on public gatherings and self-imposed quarantine have severely impacted
+interaction amongst the people.
+This has led to the development of fear, stress and anxiety amongst the masses during
+these uncertain and difficult times. Thus it becomes increasingly vital for us to interact
+with people (online) and keep ourselves engaged, both to preserve our mental health
+and also to create a positive environment for those around us (i.e. family).
+Interacting and connecting with people who have shared interests and hobbies can help
+reduce mental stress, anxiety and isolation-trauma, thus enabling people to better cope
+with the COVID-19 pandemic.
+Studies have shown that online social interaction in such a time, can help rejuvenate
+our low spirits, improve mental health and sharpness as well as enable us to develop
+life-long relations with others during this time, which may have otherwise been impossible
+without our current technology. 
+To address this issue of adverse mental health conditions due to decreased social interaction
+and to provide a solution in the form of an online platform where people can
+find and connect with each other - We have designed a program which would allow
+people connect with each other so as to find and make friends based on their
+shared interests and compatibility.
 
 # Running The App 📱
 Clone the project:
